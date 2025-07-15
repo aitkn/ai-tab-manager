@@ -1,0 +1,2371 @@
+<!DOCTYPE html>
+<!--
+  AI Tab Manager - Copyright (c) 2025 AI Tech Knowledge LLC
+  Proprietary License - See LICENSE file
+  support@aitabmanager.com
+-->
+<html>
+<head>
+  <meta charset="utf-8">
+  <!-- SYNC-WEBSITE: Replace title -->
+  <title>AI Tab Manager - Help</title>
+  <!-- SYNC-WEBSITE: Add meta tags after title -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Roboto:wght@300;400;500;700&family=Roboto+Mono:wght@400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="popup.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--md-sys-color-surface);
+      color: var(--md-sys-color-on-surface);
+      font-family: 'Roboto', sans-serif;
+      font-size: var(--md-sys-typescale-body-medium);
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+    
+    /* Theme-dependent link styles */
+    a {
+      color: var(--md-sys-color-primary);
+      text-decoration: none;
+    }
+    
+    a:hover {
+      text-decoration: underline;
+      opacity: 0.8;
+    }
+    
+    a:visited {
+      color: var(--md-sys-color-primary);
+      opacity: 0.9;
+    }
+    
+    /* Slideshow Styles */
+    .screenshots-section {
+      margin: 40px 0;
+    }
+    
+    .slideshow-container {
+      position: relative;
+      max-width: 800px;
+      margin: 24px auto;
+      background: var(--md-sys-color-surface-container);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    
+    .screenshot-slide {
+      display: none;
+      text-align: center;
+    }
+    
+    .screenshot-slide.active {
+      display: block;
+    }
+    
+    .screenshot-slide img {
+      width: 100%;
+      height: auto;
+      display: block;
+      cursor: zoom-in;
+    }
+    
+    .screenshot-caption {
+      padding: 24px;
+      background: var(--md-sys-color-surface-container);
+      color: var(--md-sys-color-on-surface);
+      font-size: var(--md-sys-typescale-body-medium);
+      line-height: 1.6;
+    }
+    
+    .screenshot-caption strong {
+      color: var(--md-sys-color-primary);
+      font-size: var(--md-sys-typescale-title-medium);
+      margin-bottom: 8px;
+      display: block;
+    }
+    
+    /* Navigation buttons */
+    .slideshow-prev, .slideshow-next {
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      width: auto;
+      margin-top: -22px;
+      padding: 16px;
+      color: white;
+      font-weight: bold;
+      font-size: 18px;
+      transition: 0.3s ease;
+      border-radius: 0 3px 3px 0;
+      background-color: rgba(0,0,0,0.5);
+      border: none;
+      user-select: none;
+    }
+    
+    .slideshow-next {
+      right: 0;
+      border-radius: 3px 0 0 3px;
+    }
+    
+    .slideshow-prev:hover, .slideshow-next:hover {
+      background-color: rgba(0,0,0,0.8);
+    }
+    
+    /* Dots indicator */
+    .slideshow-dots {
+      text-align: center;
+      padding: 20px;
+      background: var(--md-sys-color-surface-container);
+    }
+    
+    .dot {
+      cursor: pointer;
+      height: 12px;
+      width: 12px;
+      margin: 0 4px;
+      background-color: var(--md-sys-color-outline);
+      border-radius: 50%;
+      display: inline-block;
+      transition: background-color 0.3s ease;
+    }
+    
+    .dot.active, .dot:hover {
+      background-color: var(--md-sys-color-primary);
+    }
+    
+    /* Responsive design */
+    @media (max-width: 600px) {
+      .slideshow-prev, .slideshow-next {
+        padding: 12px;
+        font-size: 16px;
+      }
+      
+      .screenshot-caption {
+        padding: 16px;
+        font-size: var(--md-sys-typescale-body-small);
+      }
+      
+      .screenshot-caption strong {
+        font-size: var(--md-sys-typescale-body-medium);
+      }
+    }
+    
+    /* Image Modal */
+    .image-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      padding-top: 60px;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: auto;
+      background-color: rgba(0, 0, 0, 0.9);
+    }
+    
+    .modal-content {
+      margin: auto;
+      display: block;
+      max-width: 90%;
+      max-height: 90%;
+    }
+    
+    .close-modal {
+      position: absolute;
+      top: 15px;
+      right: 35px;
+      color: #f1f1f1;
+      font-size: 40px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    
+    .close-modal:hover,
+    .close-modal:focus {
+      color: #bbb;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    
+    /* Documentation Layout */
+    .doc-container {
+      display: flex;
+      min-height: 100vh;
+      position: relative;
+    }
+    
+    /* Sidebar Navigation */
+    .doc-sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 280px;
+      height: 100vh;
+      background: var(--md-sys-color-surface-container);
+      border-right: 1px solid var(--md-sys-color-outline-variant);
+      overflow-y: auto;
+      transition: transform 0.3s ease;
+      z-index: 100;
+    }
+    
+    .sidebar-header {
+      padding: 24px 20px;
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+      background: var(--md-sys-color-surface);
+    }
+    
+    .sidebar-title {
+      font-size: var(--md-sys-typescale-title-large);
+      font-weight: 600;
+      color: var(--md-sys-color-primary);
+      margin: 0;
+    }
+    
+    .sidebar-nav {
+      padding: 16px 0;
+    }
+    
+    .nav-section {
+      margin-bottom: 4px;
+    }
+    
+    .nav-section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+      user-select: none;
+    }
+    
+    .nav-section-header:hover {
+      background: var(--md-sys-color-surface-container-high);
+    }
+    
+    .nav-section-title {
+      font-size: var(--md-sys-typescale-body-medium);
+      font-weight: 500;
+      color: var(--md-sys-color-on-surface);
+    }
+    
+    .nav-section-arrow {
+      width: 20px;
+      height: 20px;
+      transition: transform 0.2s;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+    
+    .nav-section.collapsed .nav-section-arrow {
+      transform: rotate(-90deg);
+    }
+    
+    .nav-subsections {
+      max-height: 1000px;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+    
+    .nav-section.collapsed .nav-subsections {
+      max-height: 0;
+    }
+    
+    .nav-link {
+      display: block;
+      padding: 8px 20px 8px 40px;
+      color: var(--md-sys-color-on-surface-variant);
+      text-decoration: none;
+      font-size: var(--md-sys-typescale-body-small);
+      transition: all 0.2s;
+    }
+    
+    .nav-link:hover {
+      background: var(--md-sys-color-surface-container-high);
+      color: var(--md-sys-color-on-surface);
+      text-decoration: none;
+    }
+    
+    .nav-link.active {
+      background: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+      font-weight: 500;
+    }
+    
+    /* Main Content */
+    .doc-main {
+      flex: 1;
+      margin-left: 280px;
+      min-height: 100vh;
+      background: var(--md-sys-color-surface);
+    }
+    
+    .help-container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 60px;
+    }
+    
+    /* Mobile Toggle Button */
+    .sidebar-toggle {
+      display: none;
+      position: fixed;
+      top: 16px;
+      left: 16px;
+      z-index: 101;
+      width: 40px;
+      height: 40px;
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .sidebar-toggle svg {
+      width: 24px;
+      height: 24px;
+    }
+    
+    /* Section Styles - Flatter Design */
+    .section {
+      margin-bottom: 60px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--md-sys-color-outline-variant);
+    }
+    
+    .section:last-child {
+      border-bottom: none;
+    }
+    
+    .section h2 {
+      font-size: var(--md-sys-typescale-headline-medium);
+      font-weight: 600;
+      color: var(--md-sys-color-on-surface);
+      margin: 0 0 24px 0;
+      line-height: 1.3;
+    }
+    
+    .section h3 {
+      font-size: var(--md-sys-typescale-title-large);
+      font-weight: 500;
+      color: var(--md-sys-color-on-surface);
+      margin: 32px 0 16px 0;
+      line-height: 1.4;
+    }
+    
+    .section p {
+      font-size: var(--md-sys-typescale-body-large);
+      line-height: 1.6;
+      color: var(--md-sys-color-on-surface-variant);
+      margin-bottom: 16px;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 968px) {
+      .doc-sidebar {
+        transform: translateX(-100%);
+      }
+      
+      .doc-sidebar.open {
+        transform: translateX(0);
+      }
+      
+      .doc-main {
+        margin-left: 0;
+      }
+      
+      .help-container {
+        padding: 80px 20px 40px;
+      }
+      
+      .sidebar-toggle {
+        display: flex;
+      }
+      
+      /* Overlay when sidebar is open on mobile */
+      .sidebar-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 99;
+      }
+      
+      .sidebar-overlay.open {
+        display: block;
+      }
+    }
+    
+    .help-header {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    
+    .help-header h1 {
+      font-size: var(--md-sys-typescale-headline-large);
+      font-weight: 400;
+      margin: 0 0 16px 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+    }
+    
+    .help-header img {
+      width: 48px;
+      height: 48px;
+    }
+    
+    .help-header p {
+      font-size: var(--md-sys-typescale-body-medium);
+      margin: 0;
+      opacity: 0.9;
+    }
+    
+    .section {
+      background: var(--md-sys-color-surface-container);
+      border-radius: 16px;
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+    
+    .section h2 {
+      font-size: var(--md-sys-typescale-headline-small);
+      font-weight: 400;
+      margin: 0 0 24px 0;
+      color: var(--md-sys-color-primary);
+    }
+    
+    .section h3 {
+      font-size: var(--md-sys-typescale-title-medium);
+      font-weight: 500;
+      margin: 24px 0 16px 0;
+      color: var(--md-sys-color-on-surface);
+    }
+    
+    .section p, .section li {
+      line-height: 1.6;
+      color: var(--md-sys-color-on-surface-variant);
+      font-size: var(--md-sys-typescale-body-medium);
+    }
+    
+    /* Problem section styling */
+    .problem-section {
+      background: var(--md-sys-color-tertiary-container);
+      color: var(--md-sys-color-on-tertiary-container);
+    }
+    
+    .problem-section h2 {
+      color: var(--md-sys-color-on-tertiary-container);
+    }
+    
+    .problem-section p {
+      color: var(--md-sys-color-on-tertiary-container);
+      opacity: 0.9;
+    }
+    
+    /* Solution section styling */
+    .solution-section {
+      background: var(--md-sys-color-primary-container);
+      color: var(--md-sys-color-on-primary-container);
+    }
+    
+    .solution-section h2 {
+      color: var(--md-sys-color-on-primary-container);
+    }
+    
+    .solution-section p, .solution-section li {
+      color: var(--md-sys-color-on-primary-container);
+      opacity: 0.9;
+    }
+    
+    /* UI Demo Styles */
+    .ui-demo {
+      background: var(--md-sys-color-surface);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: 12px;
+      padding: 24px;
+      margin: 24px 0;
+    }
+    
+    .ui-demo-label {
+      font-size: var(--md-sys-typescale-label-medium);
+      color: var(--md-sys-color-on-surface-variant);
+      margin-bottom: 12px;
+      font-weight: 500;
+      letter-spacing: 0.1px;
+    }
+    
+    /* Category examples */
+    .category-examples {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+    
+    .category-example {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px;
+      background: var(--md-sys-color-surface);
+      border-radius: 12px;
+      border: 1px solid var(--md-sys-color-outline-variant);
+    }
+    
+    .category-icon-wrapper {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .category-details h4 {
+      margin: 0 0 4px 0;
+      font-size: var(--md-sys-typescale-title-small);
+      font-weight: 500;
+    }
+    
+    .category-details p {
+      margin: 0;
+      font-size: var(--md-sys-typescale-body-small);
+      color: var(--md-sys-color-on-surface-variant);
+    }
+    
+    /* Method badges */
+    .method-badges {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin: 16px 0;
+    }
+    
+    .method-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+      border-radius: 24px;
+      font-size: var(--md-sys-typescale-label-medium);
+      font-weight: 500;
+    }
+    
+    .method-badge.optional {
+      background: var(--md-sys-color-tertiary-container);
+      color: var(--md-sys-color-on-tertiary-container);
+    }
+    
+    /* Feature list */
+    .feature-list {
+      list-style: none;
+      padding: 0;
+      margin: 16px 0;
+    }
+    
+    .feature-list li {
+      position: relative;
+      padding-left: 32px;
+      margin-bottom: 12px;
+    }
+    
+    .feature-list li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--md-sys-color-primary);
+      font-weight: bold;
+      font-size: var(--md-sys-typescale-label-medium);
+    }
+    
+    /* Group by examples */
+    .grouping-examples {
+      display: grid;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    
+    .grouping-example {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px;
+      background: var(--md-sys-color-surface);
+      border-radius: 12px;
+      border: 1px solid var(--md-sys-color-outline-variant);
+    }
+    
+    .grouping-icon {
+      width: 24px;
+      height: 24px;
+      color: var(--md-sys-color-primary);
+    }
+    
+    /* Code/pattern examples */
+    .pattern-example {
+      background: var(--md-sys-color-surface-container-highest);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin: 8px 0;
+      font-family: 'Roboto Mono', monospace;
+      font-size: var(--md-sys-typescale-body-small);
+    }
+    
+    /* Privacy badges */
+    .privacy-badges {
+      display: flex;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    
+    .privacy-badge {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 20px;
+      background: var(--md-sys-color-secondary-container);
+      color: var(--md-sys-color-on-secondary-container);
+      border-radius: 12px;
+      font-weight: 500;
+    }
+    
+    .privacy-badge svg {
+      width: 20px;
+      height: 20px;
+    }
+    
+    /* Support links */
+    .support-links {
+      display: flex;
+      gap: 16px;
+      margin: 24px 0;
+      flex-wrap: wrap;
+    }
+    
+    .support-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      background: var(--md-sys-color-primary);
+      color: var(--md-sys-color-on-primary) !important;
+      text-decoration: none;
+      border-radius: 24px;
+      font-weight: 500;
+      transition: all 200ms ease;
+      border: 1px solid var(--md-sys-color-primary);
+    }
+    
+    .support-link:visited {
+      color: var(--md-sys-color-on-primary) !important;
+    }
+    
+    .support-link:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      color: var(--md-sys-color-on-primary);
+      text-decoration: none;
+    }
+    
+    .support-link svg {
+      width: 20px;
+      height: 20px;
+      color: var(--md-sys-color-on-primary);
+      fill: var(--md-sys-color-on-primary);
+      stroke: var(--md-sys-color-on-primary);
+    }
+    
+    /* Collapsible sections */
+    details {
+      margin: 16px 0;
+    }
+    
+    details summary {
+      cursor: pointer;
+      padding: 12px;
+      background: var(--md-sys-color-surface-container-high);
+      border-radius: 8px;
+      font-weight: 500;
+      user-select: none;
+      transition: background 200ms ease;
+    }
+    
+    details summary:hover {
+      background: var(--md-sys-color-surface-container-highest);
+    }
+    
+    details[open] summary {
+      border-radius: 8px 8px 0 0;
+      margin-bottom: 0;
+    }
+    
+    details .details-content {
+      padding: 16px;
+      background: var(--md-sys-color-surface-container-high);
+      border-radius: 0 0 8px 8px;
+    }
+    
+    /* Category colors - theme dependent */
+    .category-important-color {
+      color: #d32f2f; /* Red 700 */
+    }
+    
+    [data-theme="dark"] .category-important-color {
+      color: #ef5350; /* Red 400 */
+    }
+    
+    .category-useful-color {
+      color: #1976d2; /* Blue 700 */
+    }
+    
+    [data-theme="dark"] .category-useful-color {
+      color: #64b5f6; /* Blue 300 */
+    }
+    
+    .category-ignore-color {
+      color: #757575; /* Grey 600 */
+    }
+    
+    [data-theme="dark"] .category-ignore-color {
+      color: #bdbdbd; /* Grey 400 */
+    }
+    
+    .category-uncategorized-color {
+      color: #9c27b0; /* Purple 700 */
+    }
+    
+    [data-theme="dark"] .category-uncategorized-color {
+      color: #ba68c8; /* Purple 300 */
+    }
+    
+    .tab-count-color {
+      color: var(--md-sys-color-on-surface-variant);
+    }
+    
+    /* Category icon colors */
+    .category-icon-uncategorized {
+      color: #9c27b0; /* Purple 700 */
+    }
+    
+    [data-theme="dark"] .category-icon-uncategorized {
+      color: #ba68c8; /* Purple 300 */
+    }
+    
+    /* Prediction agreement colors - theme dependent */
+    .agreement-correct-color {
+      color: #4caf50; /* Green 500 */
+    }
+    
+    [data-theme="dark"] .agreement-correct-color {
+      color: #66bb6a; /* Green 400 */
+    }
+    
+    .agreement-wrong-color {
+      color: #f44336; /* Red 500 */
+    }
+    
+    [data-theme="dark"] .agreement-wrong-color {
+      color: #ef5350; /* Red 400 */
+    }
+    
+    .agreement-none-color {
+      color: #9e9e9e; /* Grey 500 */
+    }
+    
+    [data-theme="dark"] .agreement-none-color {
+      color: #bdbdbd; /* Grey 400 */
+    }
+    
+    /* Toolbar styles for help page */
+    .toolbar-row {
+      display: flex;
+      align-items: center;
+      background: var(--md-sys-color-surface-container);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: 12px;
+      padding: 8px 12px;
+      margin-bottom: 8px;
+      min-height: 48px;
+    }
+    
+    .toolbar-section {
+      display: flex;
+      align-items: center;
+    }
+    
+    .toolbar-section.left-section {
+      justify-content: flex-start;
+    }
+    
+    .toolbar-section.middle-section {
+      flex: 1;
+      justify-content: center;
+    }
+    
+    .toolbar-section.right-section {
+      justify-content: flex-end;
+    }
+    
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 8px;
+    }
+    
+    .control-group label {
+      font-weight: 500;
+      color: var(--md-sys-color-on-surface-variant);
+    }
+    
+    /* Tab item styles for help page */
+    .ui-demo .tab-item {
+      display: flex;
+      align-items: center;
+      background: var(--md-sys-color-surface-container);
+      border: 1px solid var(--md-sys-color-outline-variant);
+      border-radius: 8px;
+      padding: 12px;
+      margin: 8px 0;
+      min-height: 48px;
+      transition: all 200ms ease;
+    }
+    
+    .ui-demo .tab-item:hover {
+      background: var(--md-sys-color-surface-container-high);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+    
+    /* Responsive */
+    @media (max-width: 600px) {
+      .help-container {
+        padding: 12px;
+      }
+      
+      .section {
+        padding: 20px;
+      }
+      
+      .help-header h1 {
+        font-size: var(--md-sys-typescale-title-large);
+      }
+      
+      .category-examples {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Documentation Container -->
+  <div class="doc-container">
+    <!-- Sidebar Navigation -->
+    <nav class="doc-sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <h2 class="sidebar-title">AI Tab Manager</h2>
+      </div>
+      <div class="sidebar-nav">
+        <!-- Getting Started -->
+        <div class="nav-section">
+          <div class="nav-section-header" onclick="toggleSection(this)">
+            <span class="nav-section-title">Getting Started</span>
+            <svg class="nav-section-arrow" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+          </div>
+          <div class="nav-subsections">
+            <a href="#problem" class="nav-link">The Problem: Tab Overload</a>
+            <a href="#solution" class="nav-link">The Solution</a>
+            <a href="#screenshots" class="nav-link">See It In Action</a>
+          </div>
+        </div>
+        
+        <!-- How It Works -->
+        <div class="nav-section">
+          <div class="nav-section-header" onclick="toggleSection(this)">
+            <span class="nav-section-title">How It Works</span>
+            <svg class="nav-section-arrow" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+          </div>
+          <div class="nav-subsections">
+            <a href="#categorization" class="nav-link">How Categorization Works</a>
+            <a href="#categories" class="nav-link">Understanding Categories</a>
+          </div>
+        </div>
+        
+        <!-- Interface Guide -->
+        <div class="nav-section">
+          <div class="nav-section-header" onclick="toggleSection(this)">
+            <span class="nav-section-title">Interface Guide</span>
+            <svg class="nav-section-arrow" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+          </div>
+          <div class="nav-subsections">
+            <a href="#interface" class="nav-link">Three Main Views</a>
+            <a href="#layout" class="nav-link">Layout Components</a>
+            <a href="#actions" class="nav-link">Tab Display & Actions</a>
+            <a href="#filters" class="nav-link">Category Filter Buttons</a>
+            <a href="#examples" class="nav-link">Sample Tab Items</a>
+            <a href="#closing" class="nav-link">Closing Tabs & Safety</a>
+          </div>
+        </div>
+        
+        <!-- Features -->
+        <div class="nav-section">
+          <div class="nav-section-header" onclick="toggleSection(this)">
+            <span class="nav-section-title">Features</span>
+            <svg class="nav-section-arrow" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+          </div>
+          <div class="nav-subsections">
+            <a href="#groupby" class="nav-link">Group By Options</a>
+            <a href="#saved" class="nav-link">Working with Saved Tabs</a>
+            <a href="#export" class="nav-link">Export/Import Features</a>
+          </div>
+        </div>
+        
+        <!-- Quick Start -->
+        <div class="nav-section">
+          <div class="nav-section-header" onclick="toggleSection(this)">
+            <span class="nav-section-title">Quick Start</span>
+            <svg class="nav-section-arrow" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+          </div>
+          <div class="nav-subsections">
+            <a href="#setup" class="nav-link">First Time Setup</a>
+            <a href="#workflow" class="nav-link">Your Daily Workflow</a>
+            <a href="#llm-setup" class="nav-link">Quick LLM Setup</a>
+          </div>
+        </div>
+        
+        <!-- Advanced -->
+        <div class="nav-section">
+          <div class="nav-section-header" onclick="toggleSection(this)">
+            <span class="nav-section-title">Advanced</span>
+            <svg class="nav-section-arrow" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+          </div>
+          <div class="nav-subsections">
+            <a href="#tips" class="nav-link">Tips & Best Practices</a>
+          </div>
+        </div>
+        
+        <!-- About -->
+        <div class="nav-section">
+          <div class="nav-section-header" onclick="toggleSection(this)">
+            <span class="nav-section-title">About</span>
+            <svg class="nav-section-arrow" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
+            </svg>
+          </div>
+          <div class="nav-subsections">
+            <a href="#privacy" class="nav-link">Privacy & Security</a>
+            <a href="#contact" class="nav-link">Support & Resources</a>
+          </div>
+        </div>
+      </div>
+    </nav>
+    
+    <!-- Mobile Menu Toggle -->
+    <button class="sidebar-toggle" onclick="toggleSidebar()">
+      <svg viewBox="0 0 24 24" fill="currentColor">
+        <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
+      </svg>
+    </button>
+    
+    <!-- Sidebar Overlay for Mobile -->
+    <div class="sidebar-overlay" onclick="closeSidebar()"></div>
+    
+    <!-- Main Content -->
+    <main class="doc-main">
+      <div class="help-container">
+        <!-- Header -->
+        <div class="help-header">
+      <h1>
+        <img src="icon48.png" alt="AI Tab Manager">
+        <!-- SYNC-WEBSITE: Replace "AI Tab Manager Help" with "AI Tab Manager" -->
+        AI Tab Manager Help
+      </h1>
+      <!-- SYNC-WEBSITE: Replace tagline and add browser buttons after </p> -->
+      <p>Your intelligent solution to tab overload</p>
+      <!-- SYNC-WEBSITE: Browser install buttons go here -->
+    </div>
+    
+    <!-- The Problem -->
+    <div id="problem" class="section problem-section">
+      <h2>The Problem: Tab Overload</h2>
+      <p>
+        If you're like most people, you open a browser window as soon as you need something - whether it's email, Google, or social media. 
+        You see an interesting article but don't have time to read it now, so you leave it open. You have a ChatGPT conversation in progress, 
+        a YouTube video you want to watch later, and that important documentation page you can't afford to lose.
+      </p>
+      <p>
+        Before you know it, you have hundreds of tabs open across multiple windows and monitors. You're afraid to close any because they 
+        contain important links you might never find again. Even when you know a tab is already open somewhere, you can't find it because 
+        you've forgotten the exact URL or title.
+      </p>
+      <p>
+        <strong>The result?</strong> A cluttered workspace, degraded browser performance, and the constant anxiety of potentially losing important information.
+      </p>
+    </div>
+    
+    <!-- The Solution -->
+    <div id="solution" class="section solution-section">
+      <h2>The Solution: AI Tab Manager</h2>
+      <p>
+        AI Tab Manager solves tab overload by giving you complete control and peace of mind. Here's how:
+      </p>
+      <ul class="feature-list">
+        <li><strong>See ALL tabs</strong> from ALL windows in one place</li>
+        <li><strong>Search instantly</strong> with multi-word search across titles and URLs</li>
+        <li><strong>Group intelligently</strong> by domain, time opened, last viewed, or duration</li>
+        <li><strong>Categorize automatically</strong> using AI to identify what's important</li>
+        <li><strong>Save everything</strong> so it's completely safe to close tabs</li>
+        <li><strong>Return anytime</strong> to your saved tabs with full search and filtering</li>
+        <li><strong>Export/Import</strong> your tab collections as CSV files</li>
+      </ul>
+      <p>
+        The real magic happens when you click <strong>"Categorize"</strong> - all your open tabs are automatically sorted into 
+        three categories based on how difficult they would be to find again. They're also saved to the database, so you can confidently 
+        close everything and return to them later.
+      </p>
+    </div>
+    
+    <!-- Screenshots Section -->
+    <div id="screenshots" class="section screenshots-section">
+      <h2>See It In Action</h2>
+      <p>
+        Experience the power of AI Tab Manager through these screenshots. Use the arrows to navigate through different features.
+      </p>
+      
+      <div class="slideshow-container">
+        <!-- Screenshot Slides - Start with Dark Theme -->
+        <div class="screenshot-slide active">
+          <img src="screenshots/01_dark_uncategorized_category.png" alt="Uncategorized Tabs by Category - Dark Theme">
+          <div class="screenshot-caption">
+            <strong>Step 1: Tab Overload - Category View</strong><br>
+            Start with chaos - dozens of tabs from various websites grouped by category. GitHub repos, Stack Overflow questions, 
+            news sites, documentation, YouTube videos - all in the <span class="category-uncategorized-color" style="font-weight: 500;">Uncategorized</span> category waiting to be organized.
+          </div>
+        </div>
+        
+        <div class="screenshot-slide">
+          <img src="screenshots/02_dark_after_categorization.png" alt="After Categorization - Dark Theme">
+          <div class="screenshot-caption">
+            <strong>Step 2: AI Categorization Complete</strong><br>
+            After clicking "Categorize", AI instantly sorts tabs into <span class="category-important-color" style="font-weight: 500;">Important</span>, <span class="category-useful-color" style="font-weight: 500;">Useful</span>, and <span class="category-ignore-color" style="font-weight: 500;">Ignore</span> categories. 
+            All tabs are automatically saved to the database before categorization for safe keeping.
+          </div>
+        </div>
+        
+        <div class="screenshot-slide">
+          <img src="screenshots/03_dark_group_by_domain.png" alt="Group by Domain - Dark Theme">
+          <div class="screenshot-caption">
+            <strong>Step 3: Group by Domain</strong><br>
+            Switch to "Saved" tabs and group by domain. GitHub, Stack Overflow, Google services, and other domains 
+            are all grouped together.
+          </div>
+        </div>
+        
+        <div class="screenshot-slide">
+          <img src="screenshots/04_light_saved_tabs.png" alt="Saved Tabs - Light Theme">
+          <div class="screenshot-caption">
+            <strong>Step 4: Light Theme View</strong><br>
+            The extension supports both light and dark themes with Material Design 3. Here's the saved tabs view in light theme - 
+            perfect for daytime browsing or users who prefer a brighter interface.
+          </div>
+        </div>
+        
+        <div class="screenshot-slide">
+          <img src="screenshots/05_dark_search_github.png" alt="Search GitHub - Dark Theme">
+          <div class="screenshot-caption">
+            <strong>Step 5: Instant Search</strong><br>
+            Type "github" in the search box and instantly filter to only GitHub-related tabs across all groups. 
+            Non-matching groups are completely hidden, making it easy to find specific content quickly.
+          </div>
+        </div>
+        
+        <div class="screenshot-slide">
+          <img src="screenshots/06_dark_all_domains_collapsed.png" alt="All Domains Collapsed - Dark Theme">
+          <div class="screenshot-caption">
+            <strong>Step 6: Collapsed Domain Groups</strong><br>
+            View all your domains at a glance with collapsed groups. Each domain shows the tab count, 
+            making it easy to see where your browsing is concentrated. Click any group to expand and see individual tabs.
+          </div>
+        </div>
+        
+        <div class="screenshot-slide">
+          <img src="screenshots/07_dark_prediction_agreement.png" alt="Prediction Agreement Groups - Dark Theme">
+          <div class="screenshot-caption">
+            <strong>Step 7: Prediction Agreement View</strong><br>
+            Advanced grouping by prediction agreement shows how well different categorization methods agree. 
+            High agreement means all methods (LLM, Rules, ML) agree on the category, while low agreement indicates conflicting predictions that may need manual review.
+          </div>
+        </div>
+        
+        <div class="screenshot-slide">
+          <img src="screenshots/08_dark_settings_llm.png" alt="LLM Settings - Dark Theme">
+          <div class="screenshot-caption">
+            <strong>Step 8: LLM Configuration</strong><br>
+            Choose from multiple AI providers - Claude, OpenAI, Gemini, DeepSeek, or Grok. 
+            Each provider offers different models and pricing. Simply add your API key and start categorizing.
+          </div>
+        </div>
+        
+        <div class="screenshot-slide">
+          <img src="screenshots/09_dark_settings_rules.png" alt="Rules Settings - Dark Theme">
+          <div class="screenshot-caption">
+            <strong>Step 9: Custom Rules</strong><br>
+            Create custom categorization rules using simple text matching or advanced regex patterns. 
+            Rules work alongside AI for precise control over specific websites or content types.
+          </div>
+        </div>
+        
+        <div class="screenshot-slide">
+          <img src="screenshots/10_dark_settings_ml.png" alt="ML Settings - Dark Theme">
+          <div class="screenshot-caption">
+            <strong>Step 10: Machine Learning</strong><br>
+            The extension learns from your manual corrections. Enable ML to improve categorization accuracy over time, 
+            view training data statistics, or reset the model to start fresh with new patterns.
+          </div>
+        </div>
+        
+        <div class="screenshot-slide">
+          <img src="screenshots/11_dark_settings_performance.png" alt="Performance Settings - Dark Theme">
+          <div class="screenshot-caption">
+            <strong>Step 11: Performance Metrics</strong><br>
+            Track the accuracy of each categorization method - see detailed statistics for Rules, ML Model, and LLM. 
+            View performance across different time periods and adjust method trust weights based on actual results.
+          </div>
+        </div>
+        
+        <div class="screenshot-slide">
+          <img src="screenshots/12_dark_export_dialog.png" alt="Export Dialog - Dark Theme">
+          <div class="screenshot-caption">
+            <strong>Step 12: Export Your Tabs</strong><br>
+            Export your saved tabs to CSV format with the option to "Include ML data" for a complete backup. 
+            With ML data included, you can restore tabs exactly as they were, preserving all predictions and training history.
+          </div>
+        </div>
+        
+        <!-- Navigation -->
+        <button class="slideshow-prev">❮</button>
+        <button class="slideshow-next">❯</button>
+        
+        <!-- Dots indicator -->
+        <div class="slideshow-dots">
+          <span class="dot active"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+          <span class="dot"></span>
+        </div>
+      </div>
+    </div>
+    
+    <!-- The Magic -->
+    <div class="section" id="categorization">
+      <h2>The Magic: How Categorization Works</h2>
+      <p>
+        AI Tab Manager uses four methods to categorize your tabs, working together for the best results:
+      </p>
+      
+      <div class="method-badges">
+        <div class="method-badge optional">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M12 16v-4m0-4h.01"></path>
+          </svg>
+          LLM (Optional)
+        </div>
+        <div class="method-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M3 12h18m-9-9v18"></path>
+          </svg>
+          Rules
+        </div>
+        <div class="method-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 11l3 3L22 4"></path>
+          </svg>
+          ML
+        </div>
+        <div class="method-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2v20m-7-7l7-7 7 7"></path>
+          </svg>
+          Manual
+        </div>
+      </div>
+      
+      <details>
+        <summary>Learn more about each method</summary>
+        <div class="details-content">
+          <h3>1. LLM (Large Language Model) - Optional but Powerful</h3>
+          <p>
+            Uses advanced AI from providers like Claude, OpenAI, Gemini, DeepSeek, or Grok to analyze your tab's URL and title 
+            to determine how difficult it would be to find again. No page content is ever sent - only the URL and title.
+          </p>
+          <ul>
+            <li>Requires an API key from your chosen provider</li>
+            <li>Costs approximately $0.001-0.02 per 100 tabs (depending on provider and model)</li>
+            <li>Only sends URL + title to the API (no page content)</li>
+            <li>Provides the most accurate initial categorization</li>
+          </ul>
+          
+          <h3>2. Rules - Your Custom Patterns</h3>
+          <p>
+            Define patterns to automatically categorize sites you visit frequently. Rules support both simple substring matching 
+            (e.g., "youtube.com") and complex regular expressions (e.g., "^https?://(www\.)?github\.com/.*"). Rules work together 
+            with other methods in an ensemble approach - the final categorization depends on each method's confidence and agreement between methods.
+          </p>
+          <div class="pattern-example">
+            URL Pattern: *youtube.com/watch*<br>
+            → Category: Useful (specific videos you want to watch later)<br><br>
+            URL Pattern: *google.com<br>
+            → Category: Ignore (Google homepage is easy to find)
+          </div>
+          
+          <details>
+            <summary>Useful Regex Patterns</summary>
+            <div class="details-content">
+              <h4>Common Patterns:</h4>
+              <div class="pattern-example">
+                • <strong>^https?://</strong> - Match http or https<br>
+                • <strong>\.(pdf|doc|docx)$</strong> - Match document files<br>
+                • <strong>/issues/\d+</strong> - Match GitHub issues<br>
+                • <strong>\?v=[^&]+</strong> - Match YouTube video IDs<br>
+                • <strong>(mail|inbox)</strong> - Match email pages<br>
+                • <strong>localhost(:\d+)?</strong> - Match local development
+              </div>
+              <p>
+                For complete regex documentation, see <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Regular_Expressions" target="_blank">MDN JavaScript Regex Guide</a>
+              </p>
+            </div>
+          </details>
+          
+          <h3>3. ML (Machine Learning) - Learns From Everything</h3>
+          <p>
+            A local neural network that learns from ALL categorization sources - your manual corrections, LLM predictions, 
+            and rule matches. Initially, ML cannot make predictions without training data. As it learns, its confidence 
+            grows and it may eventually outvote other methods.
+          </p>
+          <ul>
+            <li>Runs 100% locally in your browser</li>
+            <li>No data ever leaves your machine</li>
+            <li>Improves accuracy over time with more data</li>
+            <li>Eventually can replace LLM when sufficiently trained</li>
+          </ul>
+          
+          <h3>4. Manual - You're Always in Control</h3>
+          <p>
+            Override any automatic categorization by clicking the category buttons on any tab - whether it's uncategorized, 
+            already categorized, in Current tabs, or Saved tabs. You can also batch categorize all uncategorized tabs 
+            using the category buttons on the Uncategorized group header.
+          </p>
+        </div>
+      </details>
+      
+      <p>
+        <strong class="category-important-color">Important:</strong> Without LLM enabled, only rules and manual categorization work initially. ML needs training data 
+        to make predictions. We strongly recommend enabling LLM at the beginning for automatic categorization of all tabs. 
+        Once ML is sufficiently trained, you can disable LLM to save costs.
+      </p>
+      <p>
+        <strong>Privacy Note:</strong> Only the optional LLM method sends data externally (just URL + title to your chosen provider). 
+        Rules and ML run entirely in your browser. The extension itself never collects or transmits your data.
+      </p>
+    </div>
+    
+    <!-- Understanding Categories -->
+    <div class="section" id="categories">
+      <h2>Understanding Categories</h2>
+      <p>
+        Tabs are sorted into categories based on how difficult they would be to find again if you closed them:
+      </p>
+      
+      <div class="category-examples">
+        <div class="category-example">
+          <div class="category-icon-wrapper">
+            <svg class="category-icon category-important-color" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+            </svg>
+          </div>
+          <div class="category-details">
+            <h4 class="category-important-color">Important</h4>
+            <p>Hard to refind: specific docs, deep search results, work in progress</p>
+          </div>
+        </div>
+        
+        <div class="category-example">
+          <div class="category-icon-wrapper">
+            <svg class="category-icon category-useful-color" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </div>
+          <div class="category-details">
+            <h4 class="category-useful-color">Useful</h4>
+            <p>Takes effort to find: articles, videos, reference pages</p>
+          </div>
+        </div>
+        
+        <div class="category-example">
+          <div class="category-icon-wrapper">
+            <svg class="category-icon category-ignore-color" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="15" y1="9" x2="9" y2="15"></line>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+          </div>
+          <div class="category-details">
+            <h4 class="category-ignore-color">Ignore</h4>
+            <p>Easy to refind: homepages, email, social media</p>
+          </div>
+        </div>
+        
+        <div class="category-example">
+          <div class="category-icon-wrapper">
+            <svg class="category-icon category-uncategorized-color" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12" y2="17"></line>
+            </svg>
+          </div>
+          <div class="category-details">
+            <h4 class="category-uncategorized-color">Uncategorized</h4>
+            <p>Not yet processed - waiting for categorization</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Interface Guide -->
+    <div class="section" id="interface">
+      <h2>Interface Guide</h2>
+      
+      <h3>Three Main Views</h3>
+      <div class="ui-demo">
+        <div class="ui-demo-label">Tab navigation with badge counters</div>
+        <div class="tab-navigation">
+          <button class="tab-btn active" data-tab="categorize">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+            </svg>
+            Current
+            <span class="tab-badge" id="categorizeBadge" style="display: block;">4</span>
+          </button>
+          <button class="tab-btn" data-tab="saved">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+            </svg>
+            Saved
+            <span class="tab-badge" id="savedBadge" style="display: block;">132</span>
+          </button>
+          <button class="tab-btn" data-tab="settings">
+            <svg viewBox="0 0 1024 1024" fill="currentColor">
+              <path d="M600.704 64a32 32 0 0 1 30.464 22.208l35.2 109.376c14.784 7.232 28.928 15.36 42.432 24.512l112.384-24.192a32 32 0 0 1 34.432 15.36L944.32 364.8a32 32 0 0 1-4.032 37.504l-77.12 85.12a357.12 357.12 0 0 1 0 49.024l77.12 85.248a32 32 0 0 1 4.032 37.504l-88.704 153.6a32 32 0 0 1-34.432 15.296L708.8 803.904c-13.44 9.088-27.648 17.28-42.368 24.512l-35.264 109.376A32 32 0 0 1 600.704 960H423.296a32 32 0 0 1-30.464-22.208L357.696 828.48a351.616 351.616 0 0 1-42.56-24.64l-112.32 24.256a32 32 0 0 1-34.432-15.36L79.68 659.2a32 32 0 0 1 4.032-37.504l77.12-85.248a357.12 357.12 0 0 1 0-48.896l-77.12-85.248A32 32 0 0 1 79.68 364.8l88.704-153.6a32 32 0 0 1 34.432-15.296l112.32 24.256c13.568-9.152 27.776-17.408 42.56-24.64l35.2-109.312A32 32 0 0 1 423.232 64H600.64zm-23.424 64H446.72l-36.352 113.088-24.512 11.968a294.113 294.113 0 0 0-34.816 20.096l-22.656 15.36-116.224-25.088-65.28 113.152 79.68 88.192-1.92 27.136a293.12 293.12 0 0 0 0 40.192l1.92 27.136-79.808 88.192 65.344 113.152 116.224-25.024 22.656 15.296a294.113 294.113 0 0 0 34.816 20.096l24.512 11.968L446.72 896h130.688l36.48-113.152 24.448-11.904a288.282 288.282 0 0 0 34.752-20.096l22.592-15.296 116.288 25.024 65.28-113.152-79.744-88.192 1.92-27.136a293.12 293.12 0 0 0 0-40.256l-1.92-27.136 79.808-88.128-65.344-113.152-116.288 24.96-22.592-15.232a287.616 287.616 0 0 0-34.752-20.096l-24.448-11.904L577.344 128zM512 320a192 192 0 1 1 0 384 192 192 0 0 1 0-384zm0 64a128 128 0 1 0 0 256 128 128 0 0 0 0-256z"/>
+            </svg>
+            Settings
+          </button>
+        </div>
+        <p style="margin: 8px 0 0 0; color: var(--md-sys-color-on-surface-variant);">
+          Badge numbers show counts: Current shows total number of tabs opened (including duplicates), Saved shows total number of URLs saved in database.
+        </p>
+      </div>
+      
+      <h3 id="layout">Layout Components Explained</h3>
+      
+      <h4>1. Tab Navigation</h4>
+      <ul>
+        <li><strong>Current:</strong> Shows all tabs currently open in ALL browser windows</li>
+        <li><strong>Saved:</strong> Show all URLs saved in the database</li>
+        <li><strong>Settings:</strong> Configure LLM, rules, ML, and preferences</li>
+      </ul>
+      
+      <h4>2. Toolbar (Two Rows)</h4>
+      <p>Both Current and Saved views have a two-row toolbar with slightly different controls:</p>
+      
+      <h5>Current Tab View Toolbar</h5>
+      <div class="ui-demo">
+        <div class="ui-demo-label">First Row - Current Tab View</div>
+        <div class="toolbar-row first-row">
+          <div class="toolbar-section left-section" style="width: 400px;">
+            <div id="currentTabControls" class="tab-specific-controls" style="display: flex; justify-content: flex-start; gap: 8px;">
+              <button class="primary-btn" title="Categorize tabs">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+                  <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+                  <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+                  <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+                </svg> Categorize</button>
+              <button class="icon-btn" title="Mute all audible tabs" style="opacity: 0.5; width: 32px; height: 32px; background: none; border: none; padding: 4px;">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M11 5L6 9H2v6h4l5 4v-14z"></path>
+                  <path d="M23 9l-6 6"></path>
+                  <path d="M17 9l6 6"></path>
+                </svg>
+              </button>
+            </div>
+          </div>
+          
+          <div class="toolbar-section middle-section">
+            <div class="control-group grouping-group">
+              <label>Group by:</label>
+              <select class="grouping-select">
+                <option value="category">Category</option>
+                <option value="domain">Domain</option>
+                <option value="opened">Opened</option>
+                <option value="lastActive">Last Active</option>
+                <option value="timeOpen">Time Open</option>
+              </select>
+              <button class="icon-btn" title="Collapse all groups">
+                <span class="toggle-arrow">▼</span>
+              </button>
+            </div>
+          </div>
+          
+          <div class="toolbar-section right-section">
+            <button class="close-all-btn" title="Close all tabs">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <h5>Saved Tab View Toolbar</h5>
+      <div class="ui-demo">
+        <div class="ui-demo-label">First Row - Saved Tab View</div>
+        <div class="toolbar-row first-row">
+          <div class="toolbar-section left-section" style="width: 400px;">
+            <!-- Empty in saved view to align with Current tab view -->
+          </div>
+          
+          <div class="toolbar-section middle-section" style="position: relative; left: 50px;">
+            <div class="control-group grouping-group">
+              <label>Group by:</label>
+              <select class="grouping-select">
+                <option value="domain">Domain</option>
+                <option value="category">Category</option>
+                <option value="date">Date</option>
+                <option value="allTime" selected>All Time</option>
+              </select>
+              <button class="icon-btn" title="Collapse all groups">
+                <span class="toggle-arrow">▼</span>
+              </button>
+            </div>
+            <div class="control-group time-granularity-group" style="display: flex; gap: 4px;">
+              <button class="granularity-btn" data-granularity="5m">5m</button>
+              <button class="granularity-btn active" data-granularity="day">Day</button>
+              <button class="granularity-btn" data-granularity="week">Week</button>
+              <button class="granularity-btn" data-granularity="month">Month</button>
+            </div>
+          </div>
+          
+          <div class="toolbar-section right-section">
+            <div id="savedTabControls" class="tab-specific-controls" style="display: flex;">
+              <div class="control-group export-import-group">
+                <button id="exportBtn" class="icon-btn" title="Export saved tabs as CSV" style="width: 16px;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                </button>
+                <button id="importBtn" class="icon-btn" title="Import tabs from CSV"  style="width: 16px;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="17 8 12 3 7 8"></polyline>
+                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <h5>Common Toolbar Features</h5>
+      <ul>
+        <li><strong>Group by dropdown:</strong> Available in both views to organize tabs by different criteria</li>
+        <li><strong>Collapse/Expand all button:</strong> Toggle all groups open or closed at once</li>
+        <li><strong>Time granularity buttons:</strong> Appear for time-based grouping</li>
+      </ul>
+      
+      <h5>View-Specific Toolbar Features</h5>
+      <ul>
+        <li><strong>Current Tab View:</strong>
+          <ul>
+            <li>Categorize button (left) - Run AI categorization on open tabs</li>
+            <li>Mute button (left) - Icon-only button to mute all audible tabs across all windows. Only enabled when tabs are playing audio</li>
+            <li>Close All button (right) - Close all tabs with safety warnings</li>
+          </ul>
+        </li>
+        <li><strong>Saved Tab View:</strong>
+          <ul>
+            <li>Export button (right) - Export saved tabs to CSV</li>
+            <li>Import button (right) - Import tabs from CSV file</li>
+          </ul>
+        </li>
+      </ul>
+      
+      <div class="ui-demo">
+        <div class="ui-demo-label">Second Row - Filters & Search</div>
+        <div class="toolbar-row second-row">
+          <div class="toolbar-section filter-section">
+            <div class="control-group category-filter-group">
+              <div class="category-filter-buttons">
+                <button class="filter-btn filter-btn-important active" title="Hide Important tabs" data-category="3">
+                  <svg class="filter-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                  </svg>
+                </button>
+                <button class="filter-btn filter-btn-useful active" title="Hide Useful tabs" data-category="2">
+                  <svg class="filter-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                </button>
+                <button class="filter-btn filter-btn-ignore active" title="Hide Ignore tabs" data-category="1">
+                  <svg class="filter-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                  </svg>
+                </button>
+                <button class="filter-btn filter-btn-uncategorized active" title="Hide Uncategorized tabs" data-category="0">
+                  <svg class="filter-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="12" y1="8" x2="12" y2="12"></line>
+                    <line x1="12" y1="16" x2="12" y2="16"></line>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <div class="toolbar-section search-section">
+            <input type="text" class="search-input" placeholder="Search tabs...">
+            <button class="clear-search-btn" title="Clear search">×</button>
+          </div>
+        </div>
+      </div>
+      
+      <h5>Second Row (Same for Both Views)</h5>
+      <p><strong>Components:</strong></p>
+      <ul>
+        <li><strong>Category Filter Buttons:</strong> Toggle to show/hide categories
+          <ul>
+            <li>Current tabs: All enabled by default</li>
+            <li>Saved tab: Ignore filtered out, Uncategorized disabled (saved tabs shouldn't be uncategorized)</li>
+          </ul>
+        </li>
+        <li><strong>Search Box:</strong> Multi-word search across titles and URLs</li>
+      </ul>
+      
+      <h4>3. Content Area - Groups</h4>
+      
+      <div class="ui-demo">
+        <div class="ui-demo-label">Sample group with tabs (Category: Useful)</div>
+        <div class="group-section" data-group-id="category-2">
+          <div class="group-header category-header-title" data-collapsed="false" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: var(--md-sys-color-surface-container); border-radius: 8px; cursor: pointer;">
+            <div class="group-title" style="display: flex; align-items: center; gap: 8px; flex: 1;">
+              <svg class="category-icon category-icon-useful" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1976d2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+              </svg>
+              <span class="group-name category-useful-color" style="font-weight: 500;">Useful</span>
+              <span class="tab-count tab-count-color">(3)</span>
+            </div>
+            <div class="group-actions">
+              <button class="category-close-btn" title="Close all tabs in group">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+          <div class="group-content" style="display: block;">
+            <div class="tab-item category-save-later already-saved" data-tab-id="123" data-category="2" data-tab-type="current">
+              <img class="favicon favicon-loaded" src="icon16.png" style="opacity: 1;">
+              <div class="tab-info">
+                <div class="tab-title" title="GitHub - AI Tab Manager">GitHub - AI Tab Manager</div>
+                <div class="tab-url tab-url-matched" title="https://github.com/aitkn/ai-tab-manager">https://github.com/aitkn/ai-tab-manager</div>
+              </div>
+              <div class="tab-actions">
+                <div class="category-buttons">
+                  <button class="category-btn category-important" title="Mark as Important">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                    </svg>
+                  </button>
+                  <button class="category-btn category-save-later" disabled title="Already Useful">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                  </button>
+                  <button class="category-btn category-can-close" title="Mark as Ignore">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <line x1="15" y1="9" x2="9" y2="15"></line>
+                      <line x1="9" y1="9" x2="15" y2="15"></line>
+                    </svg>
+                  </button>
+                </div>
+                <button class="close-btn" title="Close tab">×</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <p><strong>Content Area Features:</strong></p>
+      <ul>
+        <li><strong>Collapsible Groups:</strong> Click header to collapse/expand</li>
+        <li><strong>Progressive Loading:</strong> First 20 groups shown, then load more as needed</li>
+        <li><strong>Items per Group:</strong> First 15 tabs shown, click "Show more" to load additional tabs</li>
+        <li><strong>Group Actions:</strong> Close/Open/Delete all tabs in group</li>
+        <li><strong>Group Category Buttons:</strong> Only appear on Uncategorized groups to bulk-categorize all tabs</li>
+      </ul>
+      
+      
+      <div class="ui-demo">
+        <div class="ui-demo-label">Uncategorized group with bulk category buttons</div>
+        <div class="group-section" data-group-id="category-0">
+          <div class="group-header category-header-title" data-collapsed="false" style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px; background: var(--md-sys-color-surface-container); border-radius: 8px; cursor: pointer;">
+            <div class="group-title" style="display: flex; align-items: center; gap: 8px; flex: 1;">
+              <svg class="category-icon category-icon-uncategorized" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle>
+                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                <line x1="12" y1="17" x2="12" y2="17"></line>
+              </svg>
+              <span class="group-name category-uncategorized-color" style="font-weight: 500;">Uncategorized</span>
+              <span class="tab-count tab-count-color">(5)</span>
+            </div>
+            <div class="group-actions" style="display: flex; gap: 4px;">
+              <div class="category-buttons" style="display: flex; gap: 2px;">
+                <button class="category-btn category-important" title="Mark all as Important" style="width: 28px; height: 28px; padding: 4px; border: none; border-radius: 4px; background: var(--md-sys-color-surface-container-high); cursor: pointer;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                  </svg>
+                </button>
+                <button class="category-btn category-save-later" title="Mark all as Useful" style="width: 28px; height: 28px; padding: 4px; border: none; border-radius: 4px; background: var(--md-sys-color-surface-container-high); cursor: pointer;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                </button>
+                <button class="category-btn category-can-close" title="Mark all as Ignore" style="width: 28px; height: 28px; padding: 4px; border: none; border-radius: 4px; background: var(--md-sys-color-surface-container-high); cursor: pointer;">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                  </svg>
+                </button>
+              </div>
+              <button class="category-close-btn" title="Close all tabs in group">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="6" x2="6" y2="18"></line>
+                  <line x1="6" y1="6" x2="18" y2="18"></line>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="ui-demo">
+        <div class="ui-demo-label">Example Use Case: Bulk Categorizing YouTube Tabs</div>
+        <div style="background: var(--md-sys-color-surface-container-low); padding: 16px; border-radius: 8px;">
+          <p style="margin: 0 0 12px 0;"><strong>Scenario:</strong> You want to categorize all your uncategorized YouTube videos as "Useful"</p>
+          <p style="margin: 0 0 12px 0;"><strong>Note:</strong> Bulk manual categorization only works when grouped by Category</p>
+          <ol style="margin: 0; padding-left: 20px;">
+            <li>Make sure "Group by" is set to "Category" (bulk actions only work in this mode)</li>
+            <li>In the search box, type "youtube" to filter only tabs with YouTube URLs</li>
+            <li>Find the <span class="category-uncategorized-color" style="font-weight: 500;">Uncategorized</span> group with your filtered YouTube tabs</li>
+            <li>Use the category buttons on the group header to mark all visible YouTube tabs as <span class="category-useful-color" style="font-weight: 500;">Useful</span></li>
+            <li>Clear the search to see all tabs again</li>
+          </ol>
+        </div>
+      </div>
+      
+      <p>
+        <strong>Smart Matching:</strong> Current tabs that match saved URLs are automatically assigned their saved category 
+        and shown with a green URL. This is why it's important to save even <span class="category-ignore-color" style="font-weight: 500;">Ignore</span> category tabs - they'll be 
+        auto-categorized when you open them again.
+      </p>
+      
+      <h3 id="actions">Tab Display & Actions</h3>
+      <div class="ui-demo">
+        <div class="ui-demo-label">Primary action button - Click to categorize and save all tabs</div>
+        <button class="primary-btn" title="Categorize tabs">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+          </svg> Categorize</button>
+        <p style="margin: 8px 0 0 0; color: var(--md-sys-color-on-surface-variant);">
+          This button uses AI to categorize all tabs and saves them to the database. Available in the Current tabs view.
+          When there are no uncategorized tabs, the button is disabled.
+        </p>
+      </div>
+      
+      <h3 id="filters">Category Filter Buttons</h3>
+      <div class="ui-demo">
+        <div class="ui-demo-label">Filter tabs by category - click to toggle</div>
+        <div class="category-filter-buttons">
+          <button class="filter-btn filter-btn-important active" title="Hide Important tabs" data-category="3">
+            <svg class="filter-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+          </button>
+          <button class="filter-btn filter-btn-useful active" title="Hide Useful tabs" data-category="2">
+            <svg class="filter-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+            </svg>
+          </button>
+          <button class="filter-btn filter-btn-ignore active" title="Hide Ignore tabs" data-category="1">
+            <svg class="filter-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="15" y1="9" x2="9" y2="15"></line>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+          </button>
+          <button class="filter-btn filter-btn-uncategorized active" title="Hide Uncategorized tabs" data-category="0">
+            <svg class="filter-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+              <line x1="12" y1="17" x2="12" y2="17"></line>
+            </svg>
+          </button>
+        </div>
+        <p style="margin: 8px 0 0 0; color: var(--md-sys-color-on-surface-variant);">
+          Active filters are highlighted with their category color. Click to toggle off and filter out that category.
+        </p>
+      </div>
+      
+      <h3 id="examples">Sample Tab Items</h3>
+      <div class="ui-demo">
+        <div class="ui-demo-label"><span class="category-useful-color" style="font-weight: 500;">Useful</span> tab - Already saved (green URL), extracted from actual extension</div>
+        <div class="tab-item category-save-later already-saved" data-tab-id="1237315423" data-category="2" data-tab-type="current">
+          <img class="favicon favicon-loaded" src="icon16.png" style="opacity: 1;">
+          <div class="tab-info">
+            <div class="tab-title" title="Example Domain">Example Domain</div>
+            <div class="tab-url tab-url-matched" title="https://example.com/">https://example.com/</div>
+          </div>
+          <div class="tab-actions">
+            <div class="category-buttons">
+              <button class="category-btn category-important" title="Mark as Important">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                </svg>
+              </button>
+              <button class="category-btn category-save-later" disabled title="Already Useful">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                </svg>
+              </button>
+              <button class="category-btn category-can-close" title="Mark as Ignore">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="15" y1="9" x2="9" y2="15"></line>
+                  <line x1="9" y1="9" x2="15" y2="15"></line>
+                </svg>
+              </button>
+            </div>
+            <button class="close-btn" title="Close tab">×</button>
+          </div>
+        </div>
+      </div>
+      
+      
+      <div class="ui-demo">
+        <div class="ui-demo-label">Visual Indicators Explained</div>
+        <ul style="margin: 8px 0; padding-left: 20px;">
+          <li><strong>Title Color:</strong> Matches the category color (<span class="category-important-color" style="font-weight: 500;">Important</span>, <span class="category-useful-color" style="font-weight: 500;">Useful</span>, <span class="category-ignore-color" style="font-weight: 500;">Ignore</span>, <span class="category-uncategorized-color" style="font-weight: 500;">Uncategorized</span>)</li>
+          <li><strong>Green URL:</strong> This tab is already saved in the database (seen in Current tabs view)</li>
+          <li><strong>Duplicate Counter:</strong> Shows ( 3 ) when multiple tabs have the same URL</li>
+          <li><strong>Category Buttons:</strong> Click to change category - disabled button shows current category</li>
+          <li><strong>Actions:</strong> Close button (X) for Current tabs, Delete button (trash can) for Saved tabs</li>
+        </ul>
+      </div>
+      
+      
+      <h3 id="closing">Closing Tabs & Safety Features</h3>
+      <div class="ui-demo">
+        <div class="ui-demo-label">The Close All button changes color to indicate safety</div>
+        <p style="margin: 8px 0;">
+          The extension uses CSS classes to style the Close All button. When it has the class "has-uncategorized", 
+          it turns orange to warn about unsaved tabs. Otherwise, it's green to indicate all tabs are saved.
+        </p>
+        <ul style="margin: 16px 0 0 0; padding-left: 20px;">
+          <li><strong>Individual tabs:</strong> Click the X button to close a single tab</li>
+          <li><strong>Group close:</strong> Round button on group headers closes all tabs in that group</li>
+          <li><strong>Close All:</strong> Top-right button closes ALL tabs across ALL windows</li>
+          <li><strong>Green button:</strong> All tabs are saved - safe to close</li>
+          <li><strong>Orange button:</strong> Contains unsaved/uncategorized tabs - shows confirmation dialog</li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- Group By Options -->
+    <div class="section" id="groupby">
+      <h2>Group By Options Explained</h2>
+      <p>
+        Organize your tabs in different ways to find what you need:
+      </p>
+      
+      <div class="grouping-examples">
+        <div class="grouping-example">
+          <svg class="grouping-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="3" width="7" height="7" rx="1"></rect>
+            <rect x="14" y="14" width="7" height="7" rx="1"></rect>
+            <rect x="3" y="14" width="7" height="7" rx="1"></rect>
+          </svg>
+          <div>
+            <strong>By Category</strong> - Groups tabs by their importance level. Perfect for quickly seeing what needs attention.
+          </div>
+        </div>
+        
+        <div class="grouping-example">
+          <svg class="grouping-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"></circle>
+            <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+          </svg>
+          <div>
+            <strong>By Domain</strong> - Groups all tabs from the same website together. Great for seeing all your GitHub, YouTube, or documentation tabs in one place.
+          </div>
+        </div>
+        
+        <div class="grouping-example">
+          <svg class="grouping-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+            <line x1="16" y1="2" x2="16" y2="6"></line>
+            <line x1="8" y1="2" x2="8" y2="6"></line>
+            <line x1="3" y1="10" x2="21" y2="10"></line>
+          </svg>
+          <div>
+            <strong>By Time</strong> - Different options for Current vs Saved tabs:
+            <div style="margin-top: 12px;">
+              <strong>Current Tabs:</strong>
+              <ul style="margin: 8px 0; padding-left: 20px;">
+                <li><strong>Opened:</strong> When the current tab was opened</li>
+                <li><strong>Last Active:</strong> When tab became active in the browser</li>
+                <li><strong>Time Opened:</strong> Duration tab has stayed open</li>
+              </ul>
+              <strong>Saved Tabs:</strong>
+              <ul style="margin: 8px 0; padding-left: 20px;">
+                <li><strong>Originally Opened:</strong> When URL was opened the very first time</li>
+                <li><strong>Last Viewed:</strong> When tab was last active</li>
+                <li><strong>Saved:</strong> When initially saved to database</li>
+                <li><strong>Total Age:</strong> Time since first open</li>
+                <li><strong>Time Since Viewed:</strong> Time since last viewed (auto-deletes after 365 days)</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="grouping-example">
+          <svg class="grouping-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9.5 2l1.5 3 3.5.5-2.5 2.5.5 3.5L9.5 10 6.6 11.5l.5-3.5L4.5 5.5 8 5z"/>
+            <path d="M15 15.5l1 2 2.5.5-2 1.5.5 2.5-2-1-2 1 .5-2.5-2-1.5 2.5-.5z"/>
+            <path d="M3 3l18 18"/>
+          </svg>
+          <div>
+            <strong>By Prediction</strong> - Groups tabs based on ML model performance (Saved tabs only):
+            <div style="margin-top: 12px;">
+              <ul style="margin: 8px 0; padding-left: 20px;">
+                <li><strong>Prediction Confidence:</strong> Groups by ML confidence in 10% steps (0-10%, 10-20%, etc.)</li>
+                <li><strong>Prediction Agreement:</strong> Shows which methods agreed on categorization:
+                  <ul style="margin: 4px 0; padding-left: 20px;">
+                    <li><span class="agreement-correct-color" style="font-weight: 500;">Green</span> - Method predicted correctly</li>
+                    <li><span class="agreement-wrong-color" style="font-weight: 500;">Red</span> - Method predicted incorrectly</li>
+                    <li><span class="agreement-none-color" style="font-weight: 500;">Gray</span> - Method didn't make a prediction</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <details>
+        <summary>Time Granularity Options</summary>
+        <div class="details-content">
+          <p>When grouping by time, you can choose the granularity:</p>
+          <ul>
+            <li><strong>5m:</strong> 5-minute intervals - see your most recent activity</li>
+            <li><strong>Day:</strong> Daily groups - what did you look at today vs yesterday?</li>
+            <li><strong>Week:</strong> Weekly groups - track tabs from past weeks</li>
+            <li><strong>Month:</strong> Monthly groups - for long-term tab management</li>
+          </ul>
+        </div>
+      </details>
+    </div>
+    
+    <!-- Managing Saved Tabs -->
+    <div class="section">
+      <h2>Managing Saved Tabs</h2>
+      
+      <h3 id="saved">Working with Saved Tabs</h3>
+      <ul>
+        <li><strong>Opening tabs:</strong> Click any saved tab to open it in the current window (or activate if already open)</li>
+        <li><strong>Open group:</strong> Click "Open all tabs in group" button - respects the safety limit in settings (default 50)</li>
+        <li><strong>Multi-window workflow:</strong> Open the extension in different windows to organize tabs across windows</li>
+        <li><strong>Deleting tabs:</strong> Click trash can icon to remove from database - safe to delete currently open tabs</li>
+        <li><strong>Recategorizing:</strong> Open tabs → Delete from database → Categorize again with new settings</li>
+      </ul>
+      
+      <h3 id="export">Export/Import Features</h3>
+      
+      <h4>Export Options</h4>
+      <ul>
+        <li><strong>Filter-aware export:</strong> Uses current filters (search/category) - export only what you see</li>
+        <li><strong>Include ML data:</strong> Checkbox option to include prediction and training data for full backup
+          <ul>
+            <li>When checked: Exports all ML predictions, confidence scores, and training history</li>
+            <li>When unchecked: Exports only basic tab information (URL, title, category)</li>
+          </ul>
+        </li>
+        <li><strong>Full backup capability:</strong> With ML data included, importing the CSV restores tabs exactly as they were</li>
+      </ul>
+      
+      <h4>Import Options</h4>
+      <ul>
+        <li><strong>Smart duplicate detection:</strong> Only imports URLs not already in database</li>
+        <li><strong>Import dialog shows:</strong>
+          <ul>
+            <li>Number of rows to import (e.g., "Import 118 rows from CSV?")</li>
+            <li>Active categorization methods that will be used</li>
+            <li>Number of active rules (e.g., "38 active rules")</li>
+          </ul>
+        </li>
+        <li><strong>"Ignore categories and recategorize all tabs" checkbox:</strong>
+          <ul>
+            <li>When checked: Ignores CSV categories and recategorizes all tabs using current settings</li>
+            <li>When unchecked: Uses categories from CSV, only categorizing tabs without categories</li>
+          </ul>
+        </li>
+        <li><strong>Auto-categorization:</strong> Tabs without categories are automatically categorized using your active methods (Rules, ML, LLM)</li>
+        <li><strong>Training metadata preservation:</strong> CSV files with ML training data (trainTimestamp, trainSource, trainConfidence) are fully imported and synced with the ML database</li>
+      </ul>
+    </div>
+    
+    <!-- Getting Started -->
+    <div class="section">
+      <h2>Getting Started</h2>
+      <p>
+        Ready to take control of your tabs? Follow this simple workflow to get up and running in minutes.
+      </p>
+      
+      <h3 id="setup">First Time Setup (2 minutes)</h3>
+      <ol>
+        <li><strong>Open the extension:</strong> Click the AI Tab Manager icon in your toolbar
+          <ul style="margin-top: 8px;">
+            <li>First time or after >1 minute: Opens to Current tab with search focused</li>
+            <li>Within 1 minute: Returns to your last viewed tab</li>
+          </ul>
+        </li>
+        <li><strong>See your chaos:</strong> All your open tabs from ALL windows appear in the Current tab view</li>
+        <li><strong>Configure categorization:</strong> Choose one of these options:
+          <ul style="margin-top: 8px;">
+            <li><strong>Option A (Recommended):</strong> Go to Settings → LLM Settings and set up an AI provider (see quick setup below)</li>
+            <li><strong>Option B:</strong> Go to Settings → LLM Settings and disable "Enable LLM Categorization" to use only Rules + ML</li>
+          </ul>
+        </li>
+        <li><strong>Click "Categorize":</strong> Watch as your tabs are instantly saved and sorted into categories</li>
+      </ol>
+      
+      <div class="ui-demo">
+        <div class="ui-demo-label">⚠️ Important: LLM is enabled by default</div>
+        <p style="margin: 8px 0;">
+          The extension expects an LLM provider to be configured. If you try to categorize without setting up LLM, 
+          you'll get an error message. Either configure an LLM provider or disable it in settings.
+        </p>
+      </div>
+      
+      <h3 id="workflow">Your Daily Workflow</h3>
+      <ol>
+        <li><strong>Browse normally</strong> - Open tabs as you always do</li>
+        <li><strong>When overwhelmed</strong> - Open the extension and click "Categorize"</li>
+        <li><strong>Review quickly</strong> - Glance at the categories, adjust any if needed</li>
+        <li><strong>Close with confidence</strong> - Use "Close All" knowing everything is saved</li>
+        <li><strong>Find tabs later</strong> - Use the Saved tab view with powerful search and filters</li>
+      </ol>
+      
+      <h3 id="llm-setup">Quick LLM Setup</h3>
+      <details>
+        <summary>Setting up AI Categorization (Recommended)</summary>
+        <div class="details-content">
+          <p>AI categorization helps organize your tabs automatically. The extension shows approximate prices for each model when you select them.</p>
+          
+          <h4>Quick Setup Steps:</h4>
+          <ol>
+            <li>Go to Settings → LLM Settings</li>
+            <li>Choose a provider and get an API key (click the link icon)</li>
+            <li>Enter your API key and click "Save Key"</li>
+            <li>Select a model - the dropdown shows estimated cost per 100 tabs</li>
+          </ol>
+          
+          <h4>Choosing a Model:</h4>
+          <p><strong>Important:</strong> You don't need the most expensive model! Any contemporary AI model works well for tab categorization. Choose based on your budget:</p>
+          <ul>
+            <li><strong>Free Options:</strong> Google's Gemma models (show as "Free" in dropdown)</li>
+            <li><strong>Budget-Friendly:</strong> Most models under 5¢ per 100 tabs work great</li>
+            <li><strong>Premium Models:</strong> Only needed if you want the absolute best accuracy</li>
+          </ul>
+          
+          <p><strong>Pricing Notes:</strong></p>
+          <ul>
+            <li>Prices shown are estimates and can vary significantly</li>
+            <li>Based on categorizing 100 tabs (typical batch size)</li>
+            <li>Actual costs depend on tab title lengths and model pricing changes</li>
+            <li>Most users spend less than $1/month even with heavy usage</li>
+          </ul>
+          
+          <h4>Why Use AI?</h4>
+          <ul>
+            <li>Categorizes ALL tabs accurately on first use</li>
+            <li>Understands context from page titles</li>
+            <li>Handles new or unusual websites well</li>
+            <li>Works alongside Rules and ML for best results</li>
+          </ul>
+          
+          <p><strong>Tip:</strong> Start with a cheaper model and upgrade only if needed. The difference in accuracy between models is often minimal for tab categorization.</p>
+        </div>
+      </details>
+      
+      <details>
+        <summary>Using Without LLM (Rules + ML Only)</summary>
+        <div class="details-content">
+          <p>If you prefer not to use an external AI service:</p>
+          
+          <ol>
+            <li>Go to Settings → LLM Settings</li>
+            <li>Disable "Enable LLM Categorization"</li>
+            <li>Set up rules for your common websites (Settings → Rules)</li>
+            <li>Manually categorize tabs to train the ML model</li>
+          </ol>
+          
+          <h4>Limitations without LLM:</h4>
+          <ul>
+            <li>Only tabs matching your rules will be categorized initially</li>
+            <li>Most tabs will remain Uncategorized until you add rules</li>
+            <li>ML needs 50+ manual corrections before it starts helping</li>
+            <li>Less accurate for new or unusual websites</li>
+          </ul>
+          
+          <p><strong>Tip:</strong> Start with broad rules for common sites (youtube.com → Useful, reddit.com → Ignore)</p>
+        </div>
+      </details>
+      
+      <details>
+        <summary>Customize Categorization Rules</summary>
+        <div class="details-content">
+          <p>Make the extension work exactly how you think:</p>
+          <ol>
+            <li>Go to Settings → Rules</li>
+            <li>Add patterns for sites you visit often</li>
+            <li>Use simple text (youtube.com) or regex patterns</li>
+            <li>Rules work alongside AI for best results</li>
+          </ol>
+          <p><strong>Example:</strong> Mark all local development (localhost) as Ignore</p>
+        </div>
+      </details>
+    </div>
+    
+    <!-- Advanced Features -->
+    <div class="section">
+      <h2>Advanced Features</h2>
+      
+      <details>
+        <summary>Custom Prompts</summary>
+        <div class="details-content">
+          <p>Customize how the LLM categorizes your tabs by modifying the prompt in Settings. This is useful if you have specific criteria for what makes a tab "important" to you.</p>
+          <div class="pattern-example">
+            Example: "Tabs related to my current project 'Apollo' should always be marked as Important"
+          </div>
+        </div>
+      </details>
+      
+      <details>
+        <summary>Rule-Based Categorization</summary>
+        <div class="details-content">
+          <p>Create rules to automatically categorize websites you visit frequently:</p>
+          <ul>
+            <li><strong>URL Patterns:</strong> Match specific parts of URLs</li>
+            <li><strong>Title Patterns:</strong> Match keywords in page titles</li>
+            <li><strong>Regular Expressions:</strong> Use regex for complex patterns</li>
+          </ul>
+          <div class="pattern-example">
+            URL: *amazon.com<br>
+            Title: (empty)<br>
+            → Category: Ignore (Amazon homepage is easy to find)<br><br>
+            
+            URL: *amazon.com/*/dp/*<br>
+            Title: (empty)<br>
+            → Category: Useful (Specific products you're researching)<br><br>
+            
+            URL: (empty)<br>
+            Title: *invoice*<br>
+            → Category: Important (Any page with "invoice" in title)
+          </div>
+        </div>
+      </details>
+      
+      <details>
+        <summary>Machine Learning Dashboard</summary>
+        <div class="details-content">
+          <p>Monitor and control the ML system that learns from your categorization patterns:</p>
+          <ul>
+            <li><strong>Model Status:</strong> See if the model is trained and ready</li>
+            <li><strong>Performance Metrics:</strong> Track accuracy for each categorization method</li>
+            <li><strong>Trust Weights:</strong> See how much the system trusts each method</li>
+            <li><strong>Training Controls:</strong> Manually trigger training or reset the model</li>
+            <li><strong>Real-time Training Charts:</strong> Watch Training & Validation Loss and Accuracy during training
+              <ul>
+                <li>Charts persist across popup sessions</li>
+                <li>10-epoch smoothing for cleaner visualization</li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </details>
+      
+    </div>
+    
+    <!-- Tips & Best Practices -->
+    <div class="section" id="tips">
+      <h2>Tips & Best Practices</h2>
+      
+      <h3>For Best Results</h3>
+      <ul class="feature-list">
+        <li>Start with LLM categorization for the most accurate initial sorting</li>
+        <li>Define rules for your most frequently visited sites</li>
+        <li>Correct any miscategorizations - the ML system learns from your feedback</li>
+        <li>Use multi-word search to quickly find tabs (searches both titles and URLs)</li>
+        <li>Export important tab collections as CSV backups</li>
+        <li>Review and clean up your saved tabs periodically</li>
+      </ul>
+      
+      <h3>Performance Tips</h3>
+      <ul class="feature-list">
+        <li>The extension handles thousands of tabs efficiently</li>
+        <li>Batch categorization processes tabs in groups for optimal performance</li>
+        <li>Search and filtering happen instantly thanks to intelligent caching</li>
+        <li>Close tabs regularly - the extension makes it safe to do so</li>
+      </ul>
+    </div>
+    
+    <!-- Privacy & Security -->
+    <div class="section" id="privacy">
+      <h2>Privacy & Security</h2>
+      
+      <div class="privacy-badges">
+        <div class="privacy-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+          </svg>
+          100% Local ML
+        </div>
+        <div class="privacy-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="10" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          No Data Collection
+        </div>
+        <div class="privacy-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+            <circle cx="12" cy="12" r="3"></circle>
+          </svg>
+          Optional LLM Only
+        </div>
+      </div>
+      
+      <h3>Your Data Stays Yours</h3>
+      <ul>
+        <li><strong>Rules & ML:</strong> Run entirely in your browser - no external connections</li>
+        <li><strong>LLM (Optional):</strong> Only sends URL + title to your chosen provider when enabled (or stays completely local with local LLM)</li>
+        <li><strong>Extension:</strong> Never collects, stores, or transmits your browsing data</li>
+        <li><strong>API Keys:</strong> Stored locally in your browser, never sent to our servers</li>
+        <li><strong>Database:</strong> All saved tabs stored locally using IndexedDB</li>
+        <li><strong>Local LLM:</strong> Complete privacy - run your own AI server for categorization with no external API calls</li>
+      </ul>
+      
+      <p>
+        <strong>Open Source:</strong> The extension's code is available on GitHub for full transparency. 
+        You can review exactly how your data is handled.
+      </p>
+    </div>
+    
+    <!-- Support & Resources -->
+    <div class="section" id="contact">
+      <h2>Support & Resources</h2>
+      
+      <div class="support-links">
+        <a href="https://github.com/aitkn/ai-tab-manager/issues" target="_blank" class="support-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path>
+          </svg>
+          Report Issues
+        </a>
+        
+        <a href="https://github.com/aitkn/ai-tab-manager" target="_blank" class="support-link">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+            <polyline points="15 3 21 3 21 9"></polyline>
+            <line x1="10" y1="14" x2="21" y2="3"></line>
+          </svg>
+          GitHub
+        </a>
+        
+        <a href="https://buymeacoffee.com/aitkn" target="_blank" class="support-link">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M2,21H20V19H2M20,8H18V5H20M20,3H4V13A4,4 0 0,0 8,17H14A4,4 0 0,0 18,13V10H20A2,2 0 0,0 22,8V5C22,3.89 21.1,3 20,3Z" />
+          </svg>
+          Support Development
+        </a>
+      </div>
+      
+      <h3>Contact</h3>
+      <p>Email: <a href="mailto:support@aitabmanager.com" style="color: var(--md-sys-color-primary);">support@aitabmanager.com</a></p>
+      
+      <h3>Version Information</h3>
+      <p>© 2025 AI Tech Knowledge LLC<br>
+      <!-- SYNC-WEBSITE: Version placeholder - update from manifest.json -->
+      Version: <span id="extension-version">1.0.0</span>
+      <!-- SYNC-WEBSITE: End version placeholder --></p>
+    </div>
+      </div>
+    </main>
+  </div>
+  
+  <!-- Image Modal -->
+  <div id="imageModal" class="image-modal">
+    <span class="close-modal">&times;</span>
+    <img class="modal-content" id="modalImage">
+  </div>
+
+  <script src="help-slideshow.js"></script>
+  
+  <!-- Navigation JavaScript -->
+  <script>
+    // Toggle section collapse
+    function toggleSection(header) {
+      const section = header.parentElement;
+      section.classList.toggle('collapsed');
+    }
+    
+    // Toggle sidebar on mobile
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.querySelector('.sidebar-overlay');
+      sidebar.classList.toggle('open');
+      overlay.classList.toggle('open');
+    }
+    
+    // Close sidebar
+    function closeSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.querySelector('.sidebar-overlay');
+      sidebar.classList.remove('open');
+      overlay.classList.remove('open');
+    }
+    
+    // Smooth scrolling for navigation links
+    document.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', function(e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href').substring(1);
+        const targetElement = document.getElementById(targetId);
+        
+        if (targetElement) {
+          // Close mobile sidebar if open
+          closeSidebar();
+          
+          // Smooth scroll to element
+          targetElement.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+          
+          // Update active state
+          document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+          this.classList.add('active');
+        }
+      });
+    });
+    
+    // Highlight active section on scroll
+    function highlightActiveSection() {
+      const sections = document.querySelectorAll('.section[id]');
+      const navLinks = document.querySelectorAll('.nav-link');
+      
+      let currentSection = '';
+      
+      sections.forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top <= 100 && rect.bottom > 100) {
+          currentSection = section.getAttribute('id');
+        }
+      });
+      
+      navLinks.forEach(link => {
+        const href = link.getAttribute('href').substring(1);
+        if (href === currentSection) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+    }
+    
+    // Add scroll event listener
+    window.addEventListener('scroll', highlightActiveSection);
+    
+    // Highlight initial section
+    highlightActiveSection();
+    
+    // Expand parent section when clicking a subsection link
+    document.querySelectorAll('.nav-link').forEach(link => {
+      const subsection = link.parentElement;
+      const section = subsection.parentElement;
+      if (section.classList.contains('nav-section')) {
+        // Ensure parent section is expanded
+        section.classList.remove('collapsed');
+      }
+    });
+  </script>
+</body>
+</html>

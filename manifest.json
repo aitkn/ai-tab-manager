@@ -1,0 +1,52 @@
+{
+  "manifest_version": 3,
+  "name": "AI Tab Manager",
+  "version": "1.0.0",
+  "description": "Intelligently categorize and manage your browser tabs using AI. Save important tabs, close unnecessary ones, and keep your browser organized.",
+  "permissions": [
+    "tabs",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://api.anthropic.com/*",
+    "https://api.openai.com/*",
+    "https://generativelanguage.googleapis.com/*",
+    "https://api.deepseek.com/*",
+    "https://api.x.ai/*"
+  ],
+  "background": {
+    "service_worker": "background-wrapper.js"
+  },
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icon16.png",
+      "48": "icon48.png",
+      "128": "icon128.png"
+    }
+  },
+  "icons": {
+    "16": "icon16.png",
+    "48": "icon48.png",
+    "128": "icon128.png"
+  },
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "lib/browser-polyfill.min.js",
+        "lib/tf-core.min.js",
+        "lib/tf-backend-cpu.min.js",
+        "lib/tf-backend-webgl.min.js",
+        "lib/tf-layers.min.js",
+        "src/data/llm-pricing.json"
+      ],
+      "matches": ["<all_urls>"]
+    }
+  ],
+  "author": "AI Tech Knowledge LLC",
+  "homepage_url": "https://github.com/aitkn/ai-tab-manager",
+  "offline_enabled": false,
+  "content_security_policy": {
+    "extension_pages": "script-src 'self'; object-src 'self'"
+  }
+}
