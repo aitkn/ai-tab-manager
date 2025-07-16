@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "AI Tab Manager",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "Intelligently categorize and manage your browser tabs using AI. Save important tabs, close unnecessary ones, and keep your browser organized.",
   "permissions": [
     "tabs",
