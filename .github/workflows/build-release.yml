@@ -1,0 +1,35 @@
+name: Build Release Packages
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Build package for Chromium-based browsers and Safari
+        run: |
+          mkdir -p dist/chromium
+          cp -r src lib *.html *.css *.js *.png LICENSE dist/chromium/
+          cp manifest.json dist/chromium/
+          cd dist/chromium && zip -r ../ai-tab-manager-chromium.zip . && cd ../..
+      
+      - name: Build Firefox package
+        run: |
+          mkdir -p dist/firefox
+          cp -r src lib *.html *.css *.js *.png LICENSE dist/firefox/
+          cp manifest.json.v2 dist/firefox/manifest.json
+          cd dist/firefox && zip -r ../ai-tab-manager-firefox.zip . && cd ../..
+      
+      - name: Create Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            dist/ai-tab-manager-chromium.zip
+            dist/ai-tab-manager-firefox.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
