@@ -18,7 +18,7 @@ jobs:
       - name: Build package for Chromium-based browsers and Safari
         run: |
           mkdir -p dist/chromium
-          # Copy all files except src-lib (lib is already processed in place)
+          # Copy all files except src-lib and scripts (lib is already processed in place)
           cp -r src lib *.html *.css *.js *.png LICENSE dist/chromium/
           cp manifest.json dist/chromium/
           cd dist/chromium && zip -r ../ai-tab-manager-chromium.zip . && cd ../..
@@ -26,7 +26,7 @@ jobs:
       - name: Build Firefox package
         run: |
           mkdir -p dist/firefox
-          # Copy all files except src-lib (lib is already processed in place)
+          # Copy all files except src-lib and scripts (lib is already processed in place)
           cp -r src lib *.html *.css *.js *.png LICENSE dist/firefox/
           cp manifest.json.v2 dist/firefox/manifest.json
           cd dist/firefox && zip -r ../ai-tab-manager-firefox.zip . && cd ../..
