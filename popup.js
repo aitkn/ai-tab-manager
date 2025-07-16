@@ -197,4 +197,7 @@ Promise.all([
   }
 }).catch(err => {
   // ML diagnostic tools not available
+  if (err && err.message && err.message.includes('Failed to fetch')) {
+    console.debug('ML diagnostic tools not loaded (expected in production):', err.message);
+  }
 });

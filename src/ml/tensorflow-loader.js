@@ -32,9 +32,13 @@ async function loadScript(src) {
   // In main thread - use script tag
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    script.src = browser.runtime.getURL(src);
+    const fullUrl = browser.runtime.getURL(src);
+    script.src = fullUrl;
     script.onload = resolve;
-    script.onerror = reject;
+    script.onerror = () => {
+      console.debug(`Failed to load TensorFlow.js resource: ${src} (${fullUrl})`);
+      reject(new Error(`Failed to load: ${src}`));
+    };
     document.head.appendChild(script);
   });
 }
