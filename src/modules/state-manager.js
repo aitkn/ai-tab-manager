@@ -54,7 +54,7 @@ export const state = {
     rules: [],  // Array of rule objects
     useLLM: true,  // Whether to use LLM for categorization
     useML: true,  // Whether to use ML categorization
-    mlEarlyStoppingPatience: 100,  // Stop after N epochs without improvement
+    mlEarlyStoppingPatience: 120,  // Stop after N epochs without improvement
     mlBatchSize: 64,  // Training batch size
     mlLearningRate: 0.001,  // Learning rate for training
     hasConfiguredSettings: false,  // First-time use flag
