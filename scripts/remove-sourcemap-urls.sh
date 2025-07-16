@@ -39,7 +39,7 @@ for file in "${FILES[@]}"; do
     if [ -f "$SOURCE_DIR/$file" ]; then
         echo -e "Processing ${GREEN}$file${NC}..."
         
-        # Copy file and remove sourceMappingURL line
+        # Copy file and remove only the sourceMappingURL line
         sed '/^\/\/# sourceMappingURL=/d' "$SOURCE_DIR/$file" > "$DEST_DIR/$file"
         
         # Verify the file was processed
@@ -58,8 +58,8 @@ done
 echo -e "\nCopying other library files..."
 for file in "$SOURCE_DIR"/*; do
     filename=$(basename "$file")
-    # Skip if already processed
-    if [[ ! " ${FILES[@]} " =~ " ${filename} " ]] && [ -f "$file" ]; then
+    # Skip if already processed or if it's CLAUDE.md
+    if [[ ! " ${FILES[@]} " =~ " ${filename} " ]] && [ -f "$file" ] && [ "$filename" != "CLAUDE.md" ]; then
         echo -e "Copying ${GREEN}$filename${NC}..."
         cp "$file" "$DEST_DIR/"
     fi
