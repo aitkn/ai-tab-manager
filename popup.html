@@ -576,6 +576,43 @@
           </div>
           
           <div class="setting-group">
+            <h3>Cross-Browser Sync</h3>
+            <p class="setting-description">
+              Sync your saved tabs across browsers using Google Drive. Data is stored in your personal Google Drive app folder.
+            </p>
+            
+            <div class="form-field-inline">
+              <input type="checkbox" id="syncEnabledCheckbox">
+              <label for="syncEnabledCheckbox" class="setting-label">
+                Enable automatic sync
+                <span class="setting-description">Syncs data 5 seconds after changes</span>
+              </label>
+            </div>
+            
+            <div id="syncSettingsContainer" style="display: none;">
+              <div class="sync-status-info">
+                <div class="sync-status-row">
+                  <span class="sync-label">Status:</span>
+                  <span id="syncStatus" class="sync-value">Not synced</span>
+                </div>
+                <div class="sync-status-row">
+                  <span class="sync-label">Last sync:</span>
+                  <span id="syncLastTime" class="sync-value">Never</span>
+                </div>
+              </div>
+              
+              <div class="form-field">
+                <button id="syncNowBtn" class="secondary-btn">Sync Now</button>
+              </div>
+              
+              <p class="setting-help-text">
+                Note: You'll need to configure the OAuth client ID in manifest.json for this to work.
+                See the documentation for setup instructions.
+              </p>
+            </div>
+          </div>
+          
+          <div class="setting-group">
             <label for="maxTabsInput" class="setting-label">
               Max Tabs to Open at Once:
               <span class="setting-description">(Safety limit)</span>

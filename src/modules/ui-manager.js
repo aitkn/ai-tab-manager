@@ -35,6 +35,32 @@ export function initializeTheme() {
   StorageService.loadTheme().then(savedTheme => {
     applyTheme(savedTheme);
     updateThemeButtons(savedTheme);
+    
+    // For Safari: Listen for system theme changes when using system theme
+    if (savedTheme === 'system' && window.matchMedia) {
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      
+      console.log('🔍 DEBUG_SAFARI_THEME: Setting up system theme change listener');
+      
+      const handleSystemThemeChange = (e) => {
+        console.log('🔍 DEBUG_SAFARI_THEME: System theme changed:', e.matches ? 'dark' : 'light');
+        
+        // Re-apply system theme when system preference changes
+        StorageService.loadTheme().then(currentTheme => {
+          if (currentTheme === 'system') {
+            applyTheme('system');
+          }
+        });
+      };
+      
+      // Modern browsers
+      if (mediaQuery.addEventListener) {
+        mediaQuery.addEventListener('change', handleSystemThemeChange);
+      } else {
+        // Legacy browsers
+        mediaQuery.addListener(handleSystemThemeChange);
+      }
+    }
   });
 }
 
@@ -56,7 +82,58 @@ function applyTheme(theme) {
   const body = document.body;
   
   if (theme === 'system') {
-    body.removeAttribute('data-theme');
+    const systemPrefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    
+    // Detect Safari popup context
+    const isSafariPopup = window.location.href.includes('safari-web-extension://') && 
+                         (window.location.search.includes('popup') || 
+                          window.location.search.includes('safariPopup') ||
+                          window.outerWidth < 500);
+    
+    if (isSafariPopup) {
+      // Safari popup workaround: Use browser storage to sync theme between popup and tab contexts
+      // This ensures consistent theme across all extension contexts
+      browser.storage.local.get(['systemThemeCache']).then(result => {
+        let themeToApply = systemPrefersDark ? 'dark' : 'light';
+        
+        if (result.systemThemeCache) {
+          // Use cached theme if available and recent (within 30 seconds)
+          const cache = result.systemThemeCache;
+          const isRecent = Date.now() - cache.timestamp < 30000;
+          if (isRecent) {
+            themeToApply = cache.theme;
+          }
+        }
+        
+        // Apply theme
+        body.setAttribute('data-theme', themeToApply);
+        
+        // Update cache for other contexts
+        browser.storage.local.set({
+          systemThemeCache: {
+            theme: themeToApply,
+            timestamp: Date.now()
+          }
+        });
+      }).catch(() => {
+        // Fallback if storage fails
+        body.setAttribute('data-theme', systemPrefersDark ? 'dark' : 'light');
+      });
+    } else {
+      // Normal tab context - use detected system preference and cache it
+      const themeToApply = systemPrefersDark ? 'dark' : 'light';
+      body.setAttribute('data-theme', themeToApply);
+      
+      // Cache for popup context
+      browser.storage.local.set({
+        systemThemeCache: {
+          theme: themeToApply,
+          timestamp: Date.now()
+        }
+      }).catch(() => {
+        // Ignore storage errors
+      });
+    }
   } else {
     body.setAttribute('data-theme', theme);
   }

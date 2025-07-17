@@ -24,9 +24,26 @@
       
       // Check if the active tab is an extension tab
       if (activeTab && activeTab.url && activeTab.url.startsWith(extensionBaseUrl)) {
-        console.log('[SAFARI-POPUP-REDIRECT] Active tab is already extension - no need for popup');
-        // Don't do anything - user is already using the extension
-        // The popup will close itself naturally
+        console.log('[SAFARI-POPUP-REDIRECT] Active tab is already extension - preventing popup content');
+        
+        // Instead of trying to close the popup, prevent its content from loading
+        // and show a minimal message that auto-dismisses
+        document.body.innerHTML = `
+          <div style="padding: 20px; text-align: center; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;">
+            <p style="margin: 0; color: #666; font-size: 14px;">Extension already open in active tab</p>
+          </div>
+        `;
+        
+        // Auto-close after a brief moment
+        setTimeout(() => {
+          try {
+            window.close();
+          } catch (e) {
+            // If window.close() doesn't work, try to minimize the popup
+            document.body.style.display = 'none';
+          }
+        }, 1000);
+        
         return;
       }
       

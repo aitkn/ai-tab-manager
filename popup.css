@@ -3250,6 +3250,34 @@ input[type="checkbox"] {
   padding: var(--md-spacing-4);
 }
 
+/* Sync settings styles */
+.sync-status-info {
+  margin: var(--md-spacing-3) 0;
+  padding: var(--md-spacing-3);
+  background-color: var(--md-sys-color-surface-variant);
+  border-radius: var(--md-sys-shape-corner-small);
+}
+
+.sync-status-row {
+  display: flex;
+  align-items: center;
+  padding: var(--md-spacing-1) 0;
+}
+
+.sync-label {
+  font-weight: 500;
+  color: var(--md-sys-color-on-surface-variant);
+  min-width: 80px;
+}
+
+.sync-value {
+  color: var(--md-sys-color-on-surface);
+}
+
+#syncSettingsContainer {
+  margin-top: var(--md-spacing-3);
+}
+
 /* Tab mode - ensure settings content expands */
 body:not(.popup-mode) .settings-content {
   height: auto;

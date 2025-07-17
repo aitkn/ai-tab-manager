@@ -202,44 +202,78 @@ export class CurrentTabsProcessor {
    * Background script tracks all tab events even when popup is closed
    */
   setupTabEventListeners(onTabChange) {
-    // Connect to background script for tab events
-    const port = browser.runtime.connect({ name: 'popup-background' });
+    let port;
     
-    // Handle messages from background
-    port.onMessage.addListener((message) => {
-      if (message.type === 'fullState') {
-        // Initial state - sync with background's current tabs tracking
-        this.syncWithBackgroundState(message.data.currentTabs);
-      } else if (onTabChange) {
-        // Tab events
-        const eventMap = {
-          'tabCreated': 'created',
-          'tabRemoved': 'removed',
-          'tabUpdated': 'updated',
-          'tabActivated': 'activated',
-          'windowRemoved': 'windowRemoved'
-        };
-        
-        const changeType = eventMap[message.type];
-        if (changeType) {
-          onTabChange({
-            changeType: changeType,
-            tab: message.data.tab || { id: message.data.tabId },
-            changeInfo: message.data.changeInfo,
-            timestamp: message.timestamp || Date.now()
-          });
-        }
+    try {
+      // Check if we can connect to the background script
+      // Safari may throw if the service worker is not ready
+      if (!browser.runtime || !browser.runtime.connect) {
+        return null;
       }
-    });
-    
-    // Handle disconnect
-    port.onDisconnect.addListener(() => {
-      logger.uiEvents('Background port disconnected');
-      // Attempt to reconnect after a delay
-      setTimeout(() => {
-        this.setupTabEventListeners(onTabChange);
-      }, 1000);
-    });
+      
+      // Connect to background script for tab events
+      port = browser.runtime.connect({ name: 'popup-background' });
+      
+      // Immediately check for lastError to clear it (prevents Safari console errors)
+      if (browser.runtime.lastError) {
+        // Clear the error by reading it - this prevents console spam in Safari
+        browser.runtime.lastError;
+        return null;
+      }
+      
+      // Handle messages from background
+      port.onMessage.addListener((message) => {
+        if (message.type === 'fullState') {
+          // Initial state - sync with background's current tabs tracking
+          this.syncWithBackgroundState(message.data.currentTabs);
+        } else if (onTabChange) {
+          // Tab events
+          const eventMap = {
+            'tabCreated': 'created',
+            'tabRemoved': 'removed',
+            'tabUpdated': 'updated',
+            'tabActivated': 'activated',
+            'windowRemoved': 'windowRemoved'
+          };
+          
+          const changeType = eventMap[message.type];
+          if (changeType) {
+            onTabChange({
+              changeType: changeType,
+              tab: message.data.tab || { id: message.data.tabId },
+              changeInfo: message.data.changeInfo,
+              timestamp: message.timestamp || Date.now()
+            });
+          }
+        }
+      });
+      
+      // Handle disconnect - critical for Safari error prevention
+      port.onDisconnect.addListener(() => {
+        // Always check lastError first to clear it and prevent console errors
+        if (browser.runtime.lastError) {
+          // Clear the error by reading it - this prevents Safari console spam
+          browser.runtime.lastError;
+          
+          // Don't retry if this is a Safari service worker suspension
+          return;
+        }
+        
+        // Normal disconnect - attempt to reconnect after a delay
+        setTimeout(() => {
+          this.setupTabEventListeners(onTabChange);
+        }, 2000);
+      });
+      
+    } catch (error) {
+      // Always check lastError after any runtime operation to prevent console errors
+      if (browser.runtime.lastError) {
+        // Clear the error by reading it
+        browser.runtime.lastError;
+      }
+      
+      return null;
+    }
     
     return port;
   }

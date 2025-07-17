@@ -460,6 +460,11 @@ class TabDatabase {
     if (errorCount > 0) {
       console.warn(`saveCategorizedTabs completed with ${errorCount} errors`);
     }
+    
+    // Notify sync service of database change
+    if (typeof window.notifyDatabaseChange === 'function') {
+      window.notifyDatabaseChange();
+    }
   }
 
   /**
@@ -779,6 +784,8 @@ class TabDatabase {
             this.cache.events.delete(urlId);
           }
         }
+        // Notify sync service of database change
+        notifyDatabaseChange();
         resolve();
       };
       transaction.onerror = () => reject(transaction.error);
@@ -816,6 +823,8 @@ class TabDatabase {
                 this.cache.urlsById.set(cachedRecord.id, cachedRecord);
               }
             }
+            // Notify sync service of database change
+            notifyDatabaseChange();
             resolve();
           };
           updateRequest.onerror = () => reject(updateRequest.error);

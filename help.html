@@ -879,7 +879,7 @@
       <div class="sidebar-nav">
         <!-- Getting Started -->
         <div class="nav-section">
-          <div class="nav-section-header" onclick="toggleSection(this)">
+          <div class="nav-section-header">
             <span class="nav-section-title">Getting Started</span>
             <svg class="nav-section-arrow" viewBox="0 0 24 24" fill="currentColor">
               <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
@@ -894,7 +894,7 @@
         
         <!-- How It Works -->
         <div class="nav-section">
-          <div class="nav-section-header" onclick="toggleSection(this)">
+          <div class="nav-section-header">
             <span class="nav-section-title">How It Works</span>
             <svg class="nav-section-arrow" viewBox="0 0 24 24" fill="currentColor">
               <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
@@ -908,7 +908,7 @@
         
         <!-- Interface Guide -->
         <div class="nav-section">
-          <div class="nav-section-header" onclick="toggleSection(this)">
+          <div class="nav-section-header">
             <span class="nav-section-title">Interface Guide</span>
             <svg class="nav-section-arrow" viewBox="0 0 24 24" fill="currentColor">
               <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
@@ -926,7 +926,7 @@
         
         <!-- Features -->
         <div class="nav-section">
-          <div class="nav-section-header" onclick="toggleSection(this)">
+          <div class="nav-section-header">
             <span class="nav-section-title">Features</span>
             <svg class="nav-section-arrow" viewBox="0 0 24 24" fill="currentColor">
               <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
@@ -941,7 +941,7 @@
         
         <!-- Quick Start -->
         <div class="nav-section">
-          <div class="nav-section-header" onclick="toggleSection(this)">
+          <div class="nav-section-header">
             <span class="nav-section-title">Quick Start</span>
             <svg class="nav-section-arrow" viewBox="0 0 24 24" fill="currentColor">
               <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
@@ -956,7 +956,7 @@
         
         <!-- Advanced -->
         <div class="nav-section">
-          <div class="nav-section-header" onclick="toggleSection(this)">
+          <div class="nav-section-header">
             <span class="nav-section-title">Advanced</span>
             <svg class="nav-section-arrow" viewBox="0 0 24 24" fill="currentColor">
               <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
@@ -969,7 +969,7 @@
         
         <!-- About -->
         <div class="nav-section">
-          <div class="nav-section-header" onclick="toggleSection(this)">
+          <div class="nav-section-header">
             <span class="nav-section-title">About</span>
             <svg class="nav-section-arrow" viewBox="0 0 24 24" fill="currentColor">
               <path d="M7.41 8.59L12 13.17l4.59-4.58L18 10l-6 6-6-6 1.41-1.41z"/>
@@ -984,14 +984,14 @@
     </nav>
     
     <!-- Mobile Menu Toggle -->
-    <button class="sidebar-toggle" onclick="toggleSidebar()">
+    <button class="sidebar-toggle">
       <svg viewBox="0 0 24 24" fill="currentColor">
         <path d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"/>
       </svg>
     </button>
     
     <!-- Sidebar Overlay for Mobile -->
-    <div class="sidebar-overlay" onclick="closeSidebar()"></div>
+    <div class="sidebar-overlay"></div>
     
     <!-- Main Content -->
     <main class="doc-main">
@@ -2264,7 +2264,7 @@
       <h3>Version Information</h3>
       <p>© 2025 AI Tech Knowledge LLC<br>
       <!-- SYNC-WEBSITE: Version placeholder - update from manifest.json -->
-      Version: <span id="extension-version">1.0.7</span>
+      Version: <span id="extension-version">1.0.8</span>
       <!-- SYNC-WEBSITE: End version placeholder --></p>
     </div>
       </div>
@@ -2277,95 +2277,7 @@
     <img class="modal-content" id="modalImage">
   </div>
 
-  <script src="help-slideshow.js"></script>
+  <script src="help.js"></script>
   
-  <!-- Navigation JavaScript -->
-  <script>
-    // Toggle section collapse
-    function toggleSection(header) {
-      const section = header.parentElement;
-      section.classList.toggle('collapsed');
-    }
-    
-    // Toggle sidebar on mobile
-    function toggleSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      const overlay = document.querySelector('.sidebar-overlay');
-      sidebar.classList.toggle('open');
-      overlay.classList.toggle('open');
-    }
-    
-    // Close sidebar
-    function closeSidebar() {
-      const sidebar = document.getElementById('sidebar');
-      const overlay = document.querySelector('.sidebar-overlay');
-      sidebar.classList.remove('open');
-      overlay.classList.remove('open');
-    }
-    
-    // Smooth scrolling for navigation links
-    document.querySelectorAll('.nav-link').forEach(link => {
-      link.addEventListener('click', function(e) {
-        e.preventDefault();
-        const targetId = this.getAttribute('href').substring(1);
-        const targetElement = document.getElementById(targetId);
-        
-        if (targetElement) {
-          // Close mobile sidebar if open
-          closeSidebar();
-          
-          // Smooth scroll to element
-          targetElement.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-          
-          // Update active state
-          document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-          this.classList.add('active');
-        }
-      });
-    });
-    
-    // Highlight active section on scroll
-    function highlightActiveSection() {
-      const sections = document.querySelectorAll('.section[id]');
-      const navLinks = document.querySelectorAll('.nav-link');
-      
-      let currentSection = '';
-      
-      sections.forEach(section => {
-        const rect = section.getBoundingClientRect();
-        if (rect.top <= 100 && rect.bottom > 100) {
-          currentSection = section.getAttribute('id');
-        }
-      });
-      
-      navLinks.forEach(link => {
-        const href = link.getAttribute('href').substring(1);
-        if (href === currentSection) {
-          link.classList.add('active');
-        } else {
-          link.classList.remove('active');
-        }
-      });
-    }
-    
-    // Add scroll event listener
-    window.addEventListener('scroll', highlightActiveSection);
-    
-    // Highlight initial section
-    highlightActiveSection();
-    
-    // Expand parent section when clicking a subsection link
-    document.querySelectorAll('.nav-link').forEach(link => {
-      const subsection = link.parentElement;
-      const section = subsection.parentElement;
-      if (section.classList.contains('nav-section')) {
-        // Ensure parent section is expanded
-        section.classList.remove('collapsed');
-      }
-    });
-  </script>
 </body>
 </html>

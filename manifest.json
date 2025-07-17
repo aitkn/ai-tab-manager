@@ -1,19 +1,27 @@
 {
   "manifest_version": 3,
   "name": "AI Tab Manager",
-  "version": "1.0.7",
-  "description": "Intelligently categorize and manage your browser tabs using AI. Save important tabs, close unnecessary ones, and keep your browser organized.",
+  "version": "1.0.8",
+  "description": "AI-powered tab manager that categorizes tabs, saves important ones, closes unnecessary ones, and keeps your browser organized.",
   "permissions": [
     "tabs",
-    "storage"
+    "storage",
+    "identity"
   ],
   "host_permissions": [
     "https://api.anthropic.com/*",
     "https://api.openai.com/*",
     "https://generativelanguage.googleapis.com/*",
     "https://api.deepseek.com/*",
-    "https://api.x.ai/*"
+    "https://api.x.ai/*",
+    "https://www.googleapis.com/*"
   ],
+  "oauth2": {
+    "client_id": "640104646645-lqipqkctmn486snfrt4tubsb8co7uu2n.apps.googleusercontent.com",
+    "scopes": [
+      "https://www.googleapis.com/auth/drive.appdata"
+    ]
+  },
   "background": {
     "service_worker": "background-wrapper.js"
   },

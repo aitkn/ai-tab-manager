@@ -121,5 +121,15 @@ export function setupTabEventListeners(onTabChange) {
     return null;
   }
   
+  // For Safari: Delay initial connection attempt to allow service worker to initialize
+  const isSafari = !browser.management || !browser.management.getSelf;
+  if (isSafari && !window._safariConnectionRetried) {
+    window._safariConnectionRetried = true;
+    setTimeout(() => {
+      tabsProcessor.setupTabEventListeners(onTabChange);
+    }, 1000);
+    return null;
+  }
+  
   return tabsProcessor.setupTabEventListeners(onTabChange);
 }

@@ -85,6 +85,12 @@ export const DOM_IDS = {
   RULES_CONTAINER: 'rulesContainer',
   ADD_RULE_BTN: 'addRuleBtn',
   
+  // Sync settings
+  SYNC_ENABLED_CHECKBOX: 'syncEnabledCheckbox',
+  SYNC_NOW_BTN: 'syncNowBtn',
+  SYNC_STATUS: 'syncStatus',
+  SYNC_LAST_TIME: 'syncLastTime',
+  
   // Other elements
   STATUS: 'status',
   API_KEY_PROMPT: 'apiKeyPrompt',
@@ -229,7 +235,9 @@ export const URLS = {
 export const STORAGE_KEYS = {
   POPUP_STATE: 'popupState',
   SETTINGS: 'settings',
-  THEME: 'theme'
+  THEME: 'theme',
+  SYNC_STATUS: 'syncStatus',
+  SYNC_LAST_TIME: 'syncLastTime'
 };
 
 // Status Messages

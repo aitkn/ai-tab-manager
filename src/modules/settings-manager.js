@@ -140,6 +140,13 @@ export async function initializeSettingsUI() {
     }
   }
   
+  // Initialize sync settings
+  try {
+    await initializeSyncSettings();
+  } catch (error) {
+    console.error('Error initializing sync settings:', error);
+  }
+  
   // Initialize rules UI - with small delay to ensure state is loaded
   setTimeout(() => {
     initializeRulesUI();
@@ -912,6 +919,125 @@ export async function initializeSettings() {
   
   // Initialize rules UI immediately (this doesn't need to wait)
   initializeRulesUI();
+}
+
+/**
+ * Initialize sync settings UI
+ */
+async function initializeSyncSettings() {
+  const { googleDriveSyncService } = await import('../services/GoogleDriveSyncService.js');
+  const { initializeDatabaseSyncAdapter } = await import('../data/database-sync-adapter.js');
+  
+  // Initialize database sync adapter with the service
+  initializeDatabaseSyncAdapter(googleDriveSyncService);
+  
+  // Get saved sync settings
+  const syncEnabled = state.settings.syncEnabled || false;
+  const syncCheckbox = $id(DOM_IDS.SYNC_ENABLED_CHECKBOX);
+  const syncContainer = $id('syncSettingsContainer');
+  const syncNowBtn = $id(DOM_IDS.SYNC_NOW_BTN);
+  const syncStatus = $id(DOM_IDS.SYNC_STATUS);
+  const syncLastTime = $id(DOM_IDS.SYNC_LAST_TIME);
+  
+  if (!syncCheckbox) {
+    console.error('Sync checkbox not found');
+    return;
+  }
+  
+  // Set initial state
+  syncCheckbox.checked = syncEnabled;
+  syncContainer.style.display = syncEnabled ? 'block' : 'none';
+  
+  // Initialize sync service
+  await googleDriveSyncService.initialize({
+    enabled: syncEnabled,
+    onSyncStart: () => {
+      if (syncStatus) {
+        syncStatus.textContent = 'Syncing...';
+        syncStatus.style.color = 'var(--md-sys-color-primary)';
+      }
+      if (syncNowBtn) {
+        syncNowBtn.disabled = true;
+        syncNowBtn.textContent = 'Syncing...';
+      }
+    },
+    onSyncComplete: (result) => {
+      if (syncStatus) {
+        syncStatus.textContent = 'Synced';
+        syncStatus.style.color = 'var(--md-sys-color-primary)';
+      }
+      if (syncLastTime) {
+        syncLastTime.textContent = new Date(result.lastSyncTime).toLocaleString();
+      }
+      if (syncNowBtn) {
+        syncNowBtn.disabled = false;
+        syncNowBtn.textContent = 'Sync Now';
+      }
+      showStatus(`Sync complete: ${result.itemsSynced} items synced`, 'success', 3000);
+    },
+    onSyncError: (error) => {
+      if (syncStatus) {
+        syncStatus.textContent = 'Sync failed';
+        syncStatus.style.color = 'var(--md-sys-color-error)';
+      }
+      if (syncNowBtn) {
+        syncNowBtn.disabled = false;
+        syncNowBtn.textContent = 'Sync Now';
+      }
+      
+      // Handle specific OAuth errors with helpful messages
+      let errorMessage = error.message;
+      if (errorMessage.includes('access_denied') || errorMessage.includes('403')) {
+        errorMessage = 'Add your email as test user in Google Cloud Console (see console for details)';
+        console.error('OAuth Setup Required:\n' +
+          '1. Go to Google Cloud Console > APIs & Services > OAuth consent screen\n' +
+          '2. Click "ADD USERS" under Test users section\n' +
+          '3. Add ' + (state.settings.userEmail || 'your email') + '\n' +
+          '4. Try sync again\n\n' +
+          'Full error:', error.message);
+      } else if (errorMessage.includes('bad client id')) {
+        errorMessage = 'Extension needs Chrome Web Store key (see console)';
+      }
+      
+      showStatus(`Sync error: ${errorMessage}`, 'error', 8000);
+    }
+  });
+  
+  // Update status display
+  const status = googleDriveSyncService.getSyncStatus();
+  if (status.lastSyncTime && syncLastTime) {
+    syncLastTime.textContent = new Date(status.lastSyncTime).toLocaleString();
+  }
+  
+  // Handle checkbox change
+  syncCheckbox.addEventListener('change', async () => {
+    const enabled = syncCheckbox.checked;
+    syncContainer.style.display = enabled ? 'block' : 'none';
+    
+    // Update settings
+    state.settings.syncEnabled = enabled;
+    await StorageService.saveSettings(state.settings);
+    
+    // Update service
+    googleDriveSyncService.setSyncEnabled(enabled);
+    
+    if (enabled) {
+      showStatus('Sync enabled - data will sync automatically', 'success', 3000);
+    } else {
+      showStatus('Sync disabled', 'info', 2000);
+    }
+  });
+  
+  // Handle sync now button
+  if (syncNowBtn) {
+    syncNowBtn.addEventListener('click', async () => {
+      try {
+        await googleDriveSyncService.syncNow();
+      } catch (error) {
+        showStatus(`Sync failed: ${error.message}`, 'error');
+      }
+    });
+  }
 }
 
 // Export default object
